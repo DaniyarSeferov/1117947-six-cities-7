@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Данияр Сеферов](https://up.htmlacademy.ru/react/7/user/1117947).
-* Наставник: [Владимир Турецкий](https://github.com/vvtvvtvvt7).
+* Наставник: [Владимир Турецкий](https://htmlacademy.ru/profile/id439019).
 
 ---
 

@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PlaceCard from '../place-card/place-card';
 import Header from '../header/header';
+import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
 
 function MainScreen(props) {
-  const {placesCount} = props;
-  const listItems = new Array(placesCount).fill(null).map((value, index) => <PlaceCard key={index.toString()} />);
+  const {city, offers} = props;
+  const listItems = offers
+    .filter((offer) => offer.city.name === city)
+    .map((offer) => <PlaceCard key={offer.id.toString()} offer={offer} />);
 
   return (
     <div className="page page--gray page--main">
@@ -84,7 +87,8 @@ function MainScreen(props) {
 }
 
 MainScreen.propTypes = {
-  placesCount: PropTypes.number.isRequired,
+  city: cityNameProp.isRequired,
+  offers: PropTypes.arrayOf(offerProp).isRequired,
 };
 
 export default MainScreen;

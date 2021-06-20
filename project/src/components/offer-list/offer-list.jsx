@@ -1,14 +1,24 @@
 import PlaceCard from '../place-card/place-card';
-import React from 'react';
+import React, {useState} from 'react';
 import {offerProp} from '../room-screen/room-screen.prop';
 import PropTypes from 'prop-types';
 
 function OfferList(props) {
+  const [activeOffer, setActiveOffer] = useState(null);
   const {offers} = props;
 
-  return(
+  if (activeOffer) {
+    activeOffer['test'] = true;
+  }
+
+  return (
     <div className="cities__places-list places__list tabs__content">
-      {offers.map((offer) => <PlaceCard key={offer.id.toString()} offer={offer}/>)}
+      {offers.map((offer) => (
+        <PlaceCard
+          key={offer.id.toString()}
+          offer={offer}
+          onHover={setActiveOffer}
+        />))}
     </div>
   );
 }

@@ -1,18 +1,19 @@
 import React from 'react';
 import {offerProp} from '../room-screen/room-screen.prop';
 import {AccommodationType} from '../../const';
+import PropTypes from 'prop-types';
 
 const MAXIMUM_RATING = 5;
 
 function PlaceCard(props) {
-  const {offer} = props;
+  const {offer, onHover} = props;
   const {isPremium, previewImage, price, isFavorite, title} = offer;
   let {rating, type} = offer;
   rating = Math.round(rating) * 100 / MAXIMUM_RATING;
   type = AccommodationType[type];
 
   return (
-    <article className="cities__place-card place-card">
+    <article className="cities__place-card place-card" onMouseOver={() => {onHover(offer);}}>
       {isPremium &&
       <div className="place-card__mark">
         <span>Premium</span>
@@ -53,6 +54,7 @@ function PlaceCard(props) {
 
 PlaceCard.propTypes = {
   offer: offerProp.isRequired,
+  onHover: PropTypes.func.isRequired,
 };
 
 export default PlaceCard;

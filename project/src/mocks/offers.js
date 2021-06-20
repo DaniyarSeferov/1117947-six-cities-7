@@ -53,7 +53,7 @@ const offers = [
     },
     'id': 2,
     'images': ['img/apartment-03.jpg', 'img/apartment-01.jpg'],
-    'isFavorite': false,
+    'isFavorite': true,
     'isPremium': false,
     'location': {
       'latitude': 52.35514938496378,

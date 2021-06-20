@@ -20,3 +20,5 @@ export const AccommodationType = {
   house: 'House',
   hotel: 'Hotel',
 };
+
+export const MAXIMUM_RATING = 5;

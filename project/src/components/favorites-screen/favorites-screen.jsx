@@ -1,11 +1,23 @@
 import React from 'react';
 import Header from '../header/header';
+import PropTypes from 'prop-types';
+import {offerProp} from '../room-screen/room-screen.prop';
 
-function FavoritesScreen() {
+function FavoritesScreen(props) {
+  const {offers} = props;
+  const offersFilter = {};
+  offers
+    .filter((offer) => offer.isFavorite)
+    .forEach((offer) => {
+      if (!offersFilter[offer.city.name]) {
+        offersFilter[offer.city.name] = [];
+      }
+      offersFilter[offer.city.name].push(offer);
+    });
 
   return (
     <div className="page">
-      <Header />
+      <Header/>
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
@@ -24,7 +36,8 @@ function FavoritesScreen() {
                   <article className="favorites__card place-card">
                     <div className="favorites__image-wrapper place-card__image-wrapper">
                       <a href="#">
-                        <img className="place-card__image" src="img/apartment-small-03.jpg" width="150" height="110" alt="Place image"/>
+                        <img className="place-card__image" src="img/apartment-small-03.jpg" width="150" height="110"
+                             alt="Place image"/>
                       </a>
                     </div>
                     <div className="favorites__card-info place-card__info">
@@ -33,7 +46,8 @@ function FavoritesScreen() {
                           <b className="place-card__price-value">&euro;180</b>
                           <span className="place-card__price-text">&#47;&nbsp;night</span>
                         </div>
-                        <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
+                        <button className="place-card__bookmark-button place-card__bookmark-button--active button"
+                                type="button">
                           <svg className="place-card__bookmark-icon" width="18" height="19">
                             <use xlinkHref="#icon-bookmark"></use>
                           </svg>
@@ -56,7 +70,8 @@ function FavoritesScreen() {
                   <article className="favorites__card place-card">
                     <div className="favorites__image-wrapper place-card__image-wrapper">
                       <a href="#">
-                        <img className="place-card__image" src="img/room-small.jpg" width="150" height="110" alt="Place image"/>
+                        <img className="place-card__image" src="img/room-small.jpg" width="150" height="110"
+                             alt="Place image"/>
                       </a>
                     </div>
                     <div className="favorites__card-info place-card__info">
@@ -65,7 +80,8 @@ function FavoritesScreen() {
                           <b className="place-card__price-value">&euro;80</b>
                           <span className="place-card__price-text">&#47;&nbsp;night</span>
                         </div>
-                        <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
+                        <button className="place-card__bookmark-button place-card__bookmark-button--active button"
+                                type="button">
                           <svg className="place-card__bookmark-icon" width="18" height="19">
                             <use xlinkHref="#icon-bookmark"></use>
                           </svg>
@@ -99,7 +115,8 @@ function FavoritesScreen() {
                   <article className="favorites__card place-card">
                     <div className="favorites__image-wrapper place-card__image-wrapper">
                       <a href="#">
-                        <img className="place-card__image" src="img/apartment-small-04.jpg" width="150" height="110" alt="Place image"/>
+                        <img className="place-card__image" src="img/apartment-small-04.jpg" width="150" height="110"
+                             alt="Place image"/>
                       </a>
                     </div>
                     <div className="favorites__card-info place-card__info">
@@ -108,7 +125,8 @@ function FavoritesScreen() {
                           <b className="place-card__price-value">&euro;180</b>
                           <span className="place-card__price-text">&#47;&nbsp;night</span>
                         </div>
-                        <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
+                        <button className="place-card__bookmark-button place-card__bookmark-button--active button"
+                                type="button">
                           <svg className="place-card__bookmark-icon" width="18" height="19">
                             <use xlinkHref="#icon-bookmark"></use>
                           </svg>
@@ -141,5 +159,9 @@ function FavoritesScreen() {
     </div>
   );
 }
+
+FavoritesScreen.propTypes = {
+  offers: PropTypes.arrayOf(offerProp).isRequired,
+};
 
 export default FavoritesScreen;

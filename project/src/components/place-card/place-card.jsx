@@ -2,6 +2,7 @@ import React from 'react';
 import {offerProp} from '../room-screen/room-screen.prop';
 import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getRatingPercent} from '../../utils';
+import {Link} from 'react-router-dom';
 
 function PlaceCard(props) {
   const {offer, onHover} = props;
@@ -18,9 +19,9 @@ function PlaceCard(props) {
       </div>}
 
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
+        <Link to={`/offer/${offer.id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
-        </a>
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -42,7 +43,7 @@ function PlaceCard(props) {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{title}</a>
+          <Link to={`/offer/${offer.id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>

@@ -29,7 +29,7 @@ function App(props) {
             offers={offers}
           />
         </Route>
-        <Route exact path={AppRoute.DEV_ROOM}>
+        <Route exact path={AppRoute.ROOM}>
           <RoomScreen
             reviews={reviews}
           />

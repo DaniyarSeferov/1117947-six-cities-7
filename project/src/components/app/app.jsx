@@ -31,6 +31,7 @@ function App(props) {
         </Route>
         <Route exact path={AppRoute.ROOM}>
           <RoomScreen
+            offers={offers}
             reviews={reviews}
           />
         </Route>

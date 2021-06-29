@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PlaceCard from '../place-card/place-card';
 import Header from '../header/header';
+import {offerProp} from '../room-screen/room-screen.prop';
+import OfferList from '../offer-list/offer-list';
 
 function MainScreen(props) {
-  const {placesCount} = props;
-  const listItems = new Array(placesCount).fill(null).map((value, index) => <PlaceCard key={index.toString()} />);
+  const {offers} = props;
 
   return (
     <div className="page page--gray page--main">
@@ -69,9 +69,8 @@ function MainScreen(props) {
                   <li className="places__option" tabIndex="0">Top rated first</li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                {listItems}
-              </div>
+              <OfferList offers={offers} />
+
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
@@ -84,7 +83,7 @@ function MainScreen(props) {
 }
 
 MainScreen.propTypes = {
-  placesCount: PropTypes.number.isRequired,
+  offers: PropTypes.arrayOf(offerProp).isRequired,
 };
 
 export default MainScreen;

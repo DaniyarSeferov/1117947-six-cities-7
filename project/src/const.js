@@ -22,3 +22,11 @@ export const AccommodationType = {
 };
 
 export const MAXIMUM_RATING = 5;
+
+export const RatingType = {
+  PERFECT: 'perfect',
+  GOOD: 'good',
+  NOT_BAD: 'not bad',
+  BADLY: 'badly',
+  TERRIBLY: 'terribly',
+};

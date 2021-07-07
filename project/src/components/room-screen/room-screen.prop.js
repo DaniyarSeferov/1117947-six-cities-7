@@ -51,4 +51,4 @@ const roomScreenProp = PropTypes.shape({
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
 }).isRequired;
 
-export {roomScreenProp, offerProp, reviewProp, cityNameProp};
+export {roomScreenProp, offerProp, reviewProp, cityNameProp, locationProp};

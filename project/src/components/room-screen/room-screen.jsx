@@ -3,17 +3,13 @@ import dayjs from 'dayjs';
 import Header from '../header/header';
 import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
-import {useParams} from 'react-router-dom';
 import {getAccommodationTypeTitle, getKey, getRatingPercent} from '../../utils';
 import CommentForm from '../comment-form/comment-form';
 
 function RoomScreen(props) {
-  const {offers, reviews} = props;
-  let { id } = useParams();
-  id = Number(id);
-  const currentOffer = offers.filter((offer) => offer.id === id)[0];
-  const {images, isPremium, title, isFavorite, bedrooms, maxAdults, price, goods, rating, host, description} = currentOffer;
-  let {type} = currentOffer;
+  const {offer, reviews} = props;
+  const {images, isPremium, title, isFavorite, bedrooms, maxAdults, price, goods, rating, host, description} = offer;
+  let {type} = offer;
   const ratingPercent = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
   const {avatarUrl, isPro, name} = host;
@@ -258,7 +254,7 @@ function RoomScreen(props) {
 }
 
 RoomScreen.propTypes = {
-  offers: PropTypes.arrayOf(offerProp).isRequired,
+  offer: offerProp.isRequired,
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
 };
 

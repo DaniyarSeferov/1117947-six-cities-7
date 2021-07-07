@@ -29,12 +29,18 @@ function App(props) {
             offers={offers}
           />
         </Route>
-        <Route exact path={AppRoute.ROOM}>
-          <RoomScreen
-            offers={offers}
-            reviews={reviews}
-          />
-        </Route>
+        <Route exact
+          path={AppRoute.ROOM}
+          render={(routeProps) => {
+            const id = Number(routeProps.match.params.id);
+            const currentOffer = offers.filter((offer) => offer.id === id)[0];
+            return (
+              <RoomScreen
+                offer={currentOffer}
+                reviews={reviews}
+              />
+            );}}
+        />
         <Route>
           <NotFoundScreen />
         </Route>

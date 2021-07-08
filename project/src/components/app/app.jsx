@@ -6,7 +6,7 @@ import SignInScreen from '../sign-in-screen/sign-in-screen';
 import FavoritesScreen from '../favorites-screen/favorites-screen';
 import RoomScreen from '../room-screen/room-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import {AppRoute} from '../../const';
+import {AppRoute, NEIGHBOURS_COUNT} from '../../const';
 import {cityNameProp, offerProp, reviewProp} from '../room-screen/room-screen.prop';
 
 function App(props) {
@@ -34,10 +34,12 @@ function App(props) {
           render={(routeProps) => {
             const id = Number(routeProps.match.params.id);
             const currentOffer = offers.filter((offer) => offer.id === id)[0];
+            const neighbours = offers.slice(0, NEIGHBOURS_COUNT);
             return (
               <RoomScreen
                 offer={currentOffer}
                 reviews={reviews}
+                neighbours={neighbours}
               />
             );}}
         />

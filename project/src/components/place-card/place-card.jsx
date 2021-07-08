@@ -5,20 +5,20 @@ import {getAccommodationTypeTitle, getRatingPercent} from '../../utils';
 import {Link} from 'react-router-dom';
 
 function PlaceCard(props) {
-  const {offer, onHover} = props;
+  const {offer, onHover, className = '', imageClassName = ''} = props;
   const {isPremium, previewImage, price, isFavorite, title} = offer;
   let {rating, type} = offer;
   rating = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
 
   return (
-    <article className="cities__place-card place-card" onMouseOver={() => {onHover(offer);}}>
+    <article className={`place-card ${className}`} onMouseOver={() => {onHover(offer);}}>
       {isPremium &&
       <div className="place-card__mark">
         <span>Premium</span>
       </div>}
 
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className={`place-card__image-wrapper ${imageClassName}`}>
         <Link to={`/offer/${offer.id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
         </Link>
@@ -54,6 +54,8 @@ function PlaceCard(props) {
 PlaceCard.propTypes = {
   offer: offerProp.isRequired,
   onHover: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  imageClassName: PropTypes.string,
 };
 
 export default PlaceCard;

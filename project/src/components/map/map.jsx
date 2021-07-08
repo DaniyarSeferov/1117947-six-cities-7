@@ -1,11 +1,12 @@
-import React, {useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import 'leaflet/dist/leaflet.css';
 import useMap from './useMap';
 import PropTypes from 'prop-types';
 import leaflet from 'leaflet';
 import {locationProp} from '../room-screen/room-screen.prop';
 
-function Map({city, points}) {
+function Map(props) {
+  const {city, points} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
@@ -30,14 +31,7 @@ function Map({city, points}) {
     }
   }, [map, points]);
 
-  return (
-    <section
-      style={{height: '100%'}}
-      className="cities__map map"
-      ref={mapRef}
-    >
-    </section>
-  );
+  return props.render(mapRef);
 }
 
 Map.propTypes = {

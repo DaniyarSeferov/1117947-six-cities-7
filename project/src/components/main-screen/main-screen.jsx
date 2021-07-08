@@ -5,6 +5,7 @@ import {offerProp} from '../room-screen/room-screen.prop';
 import OfferList from '../offer-list/offer-list';
 import Map from '../map/map';
 import {CITY} from '../../mocks/city';
+import {OfferListType} from '../../const';
 
 function MainScreen(props) {
   const {offers} = props;
@@ -73,11 +74,22 @@ function MainScreen(props) {
                   <li className="places__option" tabIndex="0">Top rated first</li>
                 </ul>
               </form>
-              <OfferList offers={offers} />
-
+              <OfferList
+                className="cities__places-list tabs__content"
+                offers={offers}
+                type={OfferListType.CITIES}
+              />
             </section>
             <div className="cities__right-section">
-              <Map city={CITY} points={points} />
+              <Map city={CITY} points={points} render={(mapRef) => (
+                <section
+                  style={{height: '100%'}}
+                  className="cities__map map"
+                  ref={mapRef}
+                >
+                </section>
+              )}
+              />
             </div>
           </div>
         </div>

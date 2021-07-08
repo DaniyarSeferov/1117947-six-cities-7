@@ -30,3 +30,10 @@ export const RatingType = {
   BADLY: 'badly',
   TERRIBLY: 'terribly',
 };
+
+export const NEIGHBOURS_COUNT = 3;
+
+export const OfferListType = {
+  CITIES: 'cities',
+  NEIGHBOURS: 'neighbours',
+};

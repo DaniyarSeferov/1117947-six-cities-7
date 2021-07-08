@@ -32,3 +32,8 @@ export const RatingType = {
 };
 
 export const NEIGHBOURS_COUNT = 3;
+
+export const OfferListType = {
+  CITIES: 'cities',
+  NEIGHBOURS: 'neighbours',
+};

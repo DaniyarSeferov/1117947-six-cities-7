@@ -1,10 +1,9 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import Header from '../header/header';
 import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getKey, getRatingPercent} from '../../utils';
-import CommentForm from '../comment-form/comment-form';
+import ReviewsList from '../reviews-list/reviews-list';
 
 function RoomScreen(props) {
   const {offer, reviews} = props;
@@ -106,42 +105,7 @@ function RoomScreen(props) {
                   </p>
                 </div>
               </div>
-              <section className="property__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
-                <ul className="reviews__list">
-                  {reviews.map((review) => {
-                    const reviewRatingPercent = getRatingPercent(review.rating);
-                    const reviewDate = dayjs(review.date);
-                    return (
-                      <li key={review.id} className="reviews__item">
-                        <div className="reviews__user user">
-                          <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                            <img className="reviews__avatar user__avatar" src={review.user.avatarUrl} width="54" height="54" alt="Reviews avatar"/>
-                          </div>
-                          <span className="reviews__user-name">
-                            {review.user.name}
-                          </span>
-                        </div>
-                        <div className="reviews__info">
-                          <div className="reviews__rating rating">
-                            <div className="reviews__stars rating__stars">
-                              <span style={{width: `${reviewRatingPercent}%`}}></span>
-                              <span className="visually-hidden">Rating</span>
-                            </div>
-                          </div>
-                          <p className="reviews__text">
-                            {review.comment}
-                          </p>
-                          <time className="reviews__time" dateTime={reviewDate.format('YYYY-MM-DD')}>
-                            {reviewDate.format('MMMM YYYY')}
-                          </time>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <CommentForm />
-              </section>
+              <ReviewsList reviews={reviews}/>
             </div>
           </div>
           <section className="property__map map"></section>

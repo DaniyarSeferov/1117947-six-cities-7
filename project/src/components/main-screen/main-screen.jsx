@@ -77,7 +77,15 @@ function MainScreen(props) {
 
             </section>
             <div className="cities__right-section">
-              <Map city={CITY} points={points} />
+              <Map city={CITY} points={points} render={(mapRef) => (
+                <section
+                  style={{height: '100%'}}
+                  className="cities__map map"
+                  ref={mapRef}
+                >
+                </section>
+              )}
+              />
             </div>
           </div>
         </div>

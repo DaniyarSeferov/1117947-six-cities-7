@@ -4,14 +4,17 @@ import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getKey, getRatingPercent} from '../../utils';
 import ReviewsList from '../reviews-list/reviews-list';
+import {CITY} from '../../mocks/city';
+import Map from '../map/map';
 
 function RoomScreen(props) {
-  const {offer, reviews} = props;
+  const {offer, reviews, neighbours} = props;
   const {images, isPremium, title, isFavorite, bedrooms, maxAdults, price, goods, rating, host, description} = offer;
   let {type} = offer;
   const ratingPercent = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
   const {avatarUrl, isPro, name} = host;
+  const points = neighbours.map((neighbourOffer) => neighbourOffer.location);
 
   return (
     <div className="page">
@@ -108,7 +111,14 @@ function RoomScreen(props) {
               <ReviewsList reviews={reviews}/>
             </div>
           </div>
-          <section className="property__map map"></section>
+          <Map city={CITY} points={points} render={(mapRef) => (
+            <section
+              className="property__map map"
+              ref={mapRef}
+            >
+            </section>
+          )}
+          />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -220,6 +230,7 @@ function RoomScreen(props) {
 RoomScreen.propTypes = {
   offer: offerProp.isRequired,
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
+  neighbours: PropTypes.arrayOf(offerProp).isRequired,
 };
 
 export default RoomScreen;

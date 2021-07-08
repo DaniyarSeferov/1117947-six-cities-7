@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import Header from '../header/header';
 import {offerProp} from '../room-screen/room-screen.prop';
 import OfferList from '../offer-list/offer-list';
+import Map from '../map/map';
+import {CITY} from '../../mocks/city';
 
 function MainScreen(props) {
   const {offers} = props;
+  const points = offers
+    .map((offer) => offer.location);
 
   return (
     <div className="page page--gray page--main">
@@ -73,7 +77,7 @@ function MainScreen(props) {
 
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map city={CITY} points={points} />
             </div>
           </div>
         </div>

@@ -13,18 +13,20 @@ function MainScreen(props) {
   const {offers, city, onChangeCity} = props;
   const points = offers
     .map((offer) => offer.location);
+  const hasOffers = offers.length ? true : null;
 
   return (
     <div className="page page--gray page--main">
       <Header />
 
-      <main className="page__main page__main--index">
+      <main className={`page__main page__main--index ${!hasOffers ? 'page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <CitiesList city={city} cities={Object.values(Cities)} onChangeCity={onChangeCity} />
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
+          <div className={`cities__places-container container ${!hasOffers ? 'cities__places-container--empty' : ''}`}>
+            {hasOffers &&
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{`${offers.length} ${offers.length !== 1 ? 'places' : 'place'} to stay in ${city}`}</b>
@@ -48,8 +50,18 @@ function MainScreen(props) {
                 offers={offers}
                 type={OfferListType.CITIES}
               />
-            </section>
+            </section>}
+            {!hasOffers &&
+            <section className="cities__no-places">
+              <div className="cities__status-wrapper tabs__content">
+                <b className="cities__status">No places to stay available</b>
+                <p className="cities__status-description">
+                  We could not find any property available at the moment in {city}
+                </p>
+              </div>
+            </section>}
             <div className="cities__right-section">
+              {hasOffers &&
               <Map city={offers[0].city} points={points} render={(mapRef) => (
                 <section
                   style={{height: '100%'}}
@@ -58,7 +70,7 @@ function MainScreen(props) {
                 >
                 </section>
               )}
-              />
+              />}
             </div>
           </div>
         </div>

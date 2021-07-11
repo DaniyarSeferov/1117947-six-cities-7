@@ -24,8 +24,10 @@ function useMap(mapRef, city) {
         .addTo(instance);
 
       setMap(instance);
+    } else if (mapRef.current !== null && map !== null) {
+      map.setView(new leaflet.LatLng(location.latitude, location.longitude), location.zoom);
     }
-  }, [mapRef, map, city]);
+  }, [mapRef, map, city.name]);
 
   return map;
 }

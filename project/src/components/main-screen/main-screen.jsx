@@ -7,6 +7,7 @@ import Map from '../map/map';
 import {Cities, OfferListType} from '../../const';
 import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
+import CitiesList from '../cities-list/cities-list';
 
 function MainScreen(props) {
   const {offers, city, onChangeCity} = props;
@@ -20,24 +21,7 @@ function MainScreen(props) {
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              {Object.values(Cities).map((cityItem) => (
-                <li key={`locations-${cityItem}`} className="locations__item">
-                  <a
-                    className={`locations__item-link tabs__item ${cityItem === city ? 'tabs__item--active' : ''}`}
-                    href={`${cityItem !== city ? '#' : ''}`}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      onChangeCity(cityItem);
-                    }}
-                  >
-                    <span>{cityItem}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <CitiesList city={city} cities={Object.values(Cities)} onChangeCity={onChangeCity} />
         </div>
         <div className="cities">
           <div className="cities__places-container container">

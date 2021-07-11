@@ -3,15 +3,16 @@ import leaflet from 'leaflet';
 
 function useMap(mapRef, city) {
   const [map, setMap] = useState(null);
+  const {location} = city;
 
   useEffect(() => {
     if (mapRef.current !== null && map === null) {
       const instance = leaflet.map(mapRef.current, {
         center: {
-          lat: city.latitude,
-          lng: city.longitude,
+          lat: location.latitude,
+          lng: location.longitude,
         },
-        zoom: city.zoom,
+        zoom: location.zoom,
         zoomControl: false,
         marker: true,
       });

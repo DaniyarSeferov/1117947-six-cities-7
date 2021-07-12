@@ -1,64 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '../header/header';
-import {offerProp} from '../room-screen/room-screen.prop';
+import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
 import OfferList from '../offer-list/offer-list';
 import Map from '../map/map';
-import {CITY} from '../../mocks/city';
-import {OfferListType} from '../../const';
+import {Cities, OfferListType} from '../../const';
+import {connect} from 'react-redux';
+import {ActionCreator} from '../../store/action';
+import CitiesList from '../cities-list/cities-list';
 
 function MainScreen(props) {
-  const {offers} = props;
+  const {offers, city, onChangeCity} = props;
   const points = offers
     .map((offer) => offer.location);
+  const hasOffers = offers.length ? true : null;
 
   return (
     <div className="page page--gray page--main">
       <Header />
 
-      <main className="page__main page__main--index">
+      <main className={`page__main page__main--index ${!hasOffers ? 'page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
-          </section>
+          <CitiesList city={city} cities={Object.values(Cities)} onChangeCity={onChangeCity} />
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
+          <div className={`cities__places-container container ${!hasOffers ? 'cities__places-container--empty' : ''}`}>
+            {hasOffers &&
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
+              <b className="places__found">{`${offers.length} ${offers.length !== 1 ? 'places' : 'place'} to stay in ${city}`}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex="0">
@@ -79,9 +50,19 @@ function MainScreen(props) {
                 offers={offers}
                 type={OfferListType.CITIES}
               />
-            </section>
+            </section>}
+            {!hasOffers &&
+            <section className="cities__no-places">
+              <div className="cities__status-wrapper tabs__content">
+                <b className="cities__status">No places to stay available</b>
+                <p className="cities__status-description">
+                  We could not find any property available at the moment in {city}
+                </p>
+              </div>
+            </section>}
             <div className="cities__right-section">
-              <Map city={CITY} points={points} render={(mapRef) => (
+              {hasOffers &&
+              <Map city={offers[0].city} points={points} render={(mapRef) => (
                 <section
                   style={{height: '100%'}}
                   className="cities__map map"
@@ -89,7 +70,7 @@ function MainScreen(props) {
                 >
                 </section>
               )}
-              />
+              />}
             </div>
           </div>
         </div>
@@ -100,6 +81,20 @@ function MainScreen(props) {
 
 MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerProp).isRequired,
+  onChangeCity: PropTypes.func.isRequired,
+  city: cityNameProp.isRequired,
 };
 
-export default MainScreen;
+const mapStateToProps = (state) => ({
+  city: state.city,
+  offers: state.offers.filter((offer) => offer.city.name === state.city),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onChangeCity(city) {
+    dispatch(ActionCreator.changeCity(city));
+  },
+});
+
+export {MainScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

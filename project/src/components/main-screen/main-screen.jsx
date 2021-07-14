@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import Header from '../header/header';
 import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
@@ -9,9 +9,13 @@ import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
 import CitiesList from '../cities-list/cities-list';
 import SortingOptions from '../sorting-options/sorting-options';
+import {sortPriceHigh, sortPriceLow, sortTopRated} from '../../utils';
 
 function MainScreen(props) {
-  const {offers, city, onChangeCity} = props;
+  const [sortKey, setSortKey] = useState('POPULAR');
+  const {city, onChangeCity} = props;
+  let {offers} = props;
+  offers = getOffers(offers, city, sortKey);
   const points = offers
     .map((offer) => offer.location);
   const hasOffers = offers.length ? true : null;
@@ -31,7 +35,7 @@ function MainScreen(props) {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{`${offers.length} ${offers.length !== 1 ? 'places' : 'place'} to stay in ${city}`}</b>
-              <SortingOptions/>
+              <SortingOptions sortKey={sortKey} onChangeSelect={setSortKey}/>
               <OfferList
                 className="cities__places-list tabs__content"
                 offers={offers}
@@ -74,7 +78,7 @@ MainScreen.propTypes = {
 
 const mapStateToProps = (state) => ({
   city: state.city,
-  offers: state.offers.filter((offer) => offer.city.name === state.city),
+  offers: state.offers,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -82,6 +86,21 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator.changeCity(city));
   },
 });
+
+const getOffers = (offers, city, sort) => {
+  offers = offers.filter((offer) => offer.city.name === city);
+
+  switch (sort) {
+    case 'PRICE_LOW':
+      return offers.slice().sort(sortPriceLow);
+    case 'PRICE_HIGH':
+      return offers.slice().sort(sortPriceHigh);
+    case 'TOP_RATED':
+      return offers.slice().sort(sortTopRated);
+  }
+
+  return offers;
+};
 
 export {MainScreen};
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

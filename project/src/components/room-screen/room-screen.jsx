@@ -1,22 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Header from '../header/header';
 import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
-import {getAccommodationTypeTitle, getKey, getRatingPercent} from '../../utils';
+import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent} from '../../utils';
 import ReviewsList from '../reviews-list/reviews-list';
-import {CITY} from '../../mocks/city';
 import Map from '../map/map';
 import {OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
 
 function RoomScreen(props) {
+  const [activeOffer, setActiveOffer] = useState(null);
   const {offer, reviews, neighbours} = props;
-  const {images, isPremium, title, isFavorite, bedrooms, maxAdults, price, goods, rating, host, description} = offer;
+  const {images, isPremium, title, isFavorite, bedrooms, maxAdults, price, goods, rating, host, description, city} = offer;
   let {type} = offer;
   const ratingPercent = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
   const {avatarUrl, isPro, name} = host;
-  const points = neighbours.map((neighbourOffer) => neighbourOffer.location);
+  const points = getMapPoints(neighbours, activeOffer);
 
   return (
     <div className="page">
@@ -113,7 +113,7 @@ function RoomScreen(props) {
               <ReviewsList reviews={reviews}/>
             </div>
           </div>
-          <Map city={CITY} points={points} render={(mapRef) => (
+          <Map city={city} points={points} render={(mapRef) => (
             <section
               className="property__map map"
               ref={mapRef}
@@ -129,6 +129,7 @@ function RoomScreen(props) {
               className="near-places__list"
               offers={neighbours}
               type={OfferListType.NEIGHBOURS}
+              onHover={setActiveOffer}
             />
           </section>
         </div>

@@ -17,6 +17,7 @@ function PlaceCardCities(props) {
 
 PlaceCardCities.propTypes = {
   className: PropTypes.string,
+  onHover: PropTypes.func.isRequired,
 };
 
 export default PlaceCardCities;

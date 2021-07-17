@@ -9,16 +9,16 @@ import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
 import CitiesList from '../cities-list/cities-list';
 import SortingOptions from '../sorting-options/sorting-options';
-import {sortPriceHigh, sortPriceLow, sortTopRated} from '../../utils';
+import {getMapPoints, sortPriceHigh, sortPriceLow, sortTopRated} from '../../utils';
 
 function MainScreen(props) {
   const [sortKey, setSortKey] = useState('POPULAR');
+  const [activeOffer, setActiveOffer] = useState(null);
   const {city, onChangeCity} = props;
   let {offers} = props;
   offers = getOffers(offers, city, sortKey);
-  const points = offers
-    .map((offer) => offer.location);
   const hasOffers = offers.length ? true : null;
+  const points = getMapPoints(offers, activeOffer);
 
   return (
     <div className="page page--gray page--main">
@@ -40,6 +40,7 @@ function MainScreen(props) {
                 className="cities__places-list tabs__content"
                 offers={offers}
                 type={OfferListType.CITIES}
+                onHover={setActiveOffer}
               />
             </section>}
             {!hasOffers &&

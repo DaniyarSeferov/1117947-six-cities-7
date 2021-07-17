@@ -14,3 +14,17 @@ export const sortPriceLow = (offerA, offerB) => offerA.price - offerB.price;
 export const sortPriceHigh = (offerA, offerB) => offerB.price - offerA.price;
 
 export const sortTopRated = (offerA, offerB) => offerB.rating - offerA.rating;
+
+export const getMapPoints = (offers, activeOffer) => offers
+  .map((offer) => {
+    if (activeOffer && offer.id === activeOffer.id) {
+      return Object.assign(
+        {},
+        offer.location,
+        {
+          isActive: true,
+        },
+      );
+    }
+    return offer.location;
+  });

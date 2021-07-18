@@ -16,6 +16,12 @@ function Map(props) {
     iconAnchor: [15, 30],
   });
 
+  const activeCustomIcon = leaflet.icon({
+    iconUrl: 'img/pin-active.svg',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+  });
+
   useEffect(() => {
     if (map) {
       points.forEach((point) => {
@@ -24,7 +30,7 @@ function Map(props) {
             lat: point.latitude,
             lng: point.longitude,
           }, {
-            icon: defaultCustomIcon,
+            icon: point.isActive ? activeCustomIcon : defaultCustomIcon,
           })
           .addTo(map);
       });

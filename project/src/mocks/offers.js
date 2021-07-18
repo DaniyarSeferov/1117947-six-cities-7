@@ -71,8 +71,8 @@ const offers = [
     'bedrooms': 3,
     'city': {
       'location': {
-        'latitude': 50.846557,
-        'longitude': 4.351697,
+        'latitude': 48.85661,
+        'longitude': 2.351499,
         'zoom': 13,
       },
       'name': 'Paris',

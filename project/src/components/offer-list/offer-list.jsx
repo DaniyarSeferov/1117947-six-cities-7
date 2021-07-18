@@ -1,5 +1,5 @@
 import PlaceCard from '../place-card/place-card';
-import React, {useState} from 'react';
+import React from 'react';
 import {offerProp} from '../room-screen/room-screen.prop';
 import PropTypes from 'prop-types';
 import {OfferListType} from '../../const';
@@ -7,21 +7,16 @@ import PlaceCardCities from '../place-card/place-card-cities';
 import PlaceCardNeighbours from '../place-card/place-card-neighbours';
 
 function OfferList(props) {
-  const [activeOffer, setActiveOffer] = useState(null);
-  const {offers, className = '', type = ''} = props;
-
-  if (activeOffer) {
-    activeOffer['test'] = true;
-  }
+  const {offers, onHover, className = '', type = ''} = props;
 
   const getComponentByType = (placeCardType, offer) => {
     switch (placeCardType) {
       case OfferListType.CITIES:
-        return <PlaceCardCities key={offer.id.toString()} offer={offer} onHover={setActiveOffer} />;
+        return <PlaceCardCities key={offer.id.toString()} offer={offer} onHover={onHover} />;
       case OfferListType.NEIGHBOURS:
-        return <PlaceCardNeighbours key={offer.id.toString()} offer={offer} onHover={setActiveOffer} />;
+        return <PlaceCardNeighbours key={offer.id.toString()} offer={offer} onHover={onHover} />;
       default:
-        return <PlaceCard key={offer.id.toString()} offer={offer} onHover={setActiveOffer} />;
+        return <PlaceCard key={offer.id.toString()} offer={offer} onHover={onHover} />;
     }
   };
 
@@ -36,6 +31,7 @@ OfferList.propTypes = {
   offers: PropTypes.arrayOf(offerProp).isRequired,
   className: PropTypes.string,
   type: PropTypes.string,
+  onHover: PropTypes.func.isRequired,
 };
 
 export default OfferList;

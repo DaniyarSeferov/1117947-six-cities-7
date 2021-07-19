@@ -8,9 +8,17 @@ import RoomScreen from '../room-screen/room-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {AppRoute, NEIGHBOURS_COUNT} from '../../const';
 import {cityNameProp, offerProp, reviewProp} from '../room-screen/room-screen.prop';
+import SpinnerScreen from '../spinner-screen/spinner-screen';
+import {connect} from 'react-redux';
 
 function App(props) {
-  const {city, offers, reviews} = props;
+  const {city, offers, reviews, isDataLoaded} = props;
+
+  if (!isDataLoaded) {
+    return (
+      <SpinnerScreen />
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -55,6 +63,13 @@ App.propTypes = {
   city: cityNameProp.isRequired,
   offers: PropTypes.arrayOf(offerProp).isRequired,
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
+  isDataLoaded: PropTypes.bool.isRequired,
 };
 
-export default App;
+const mapStateToProps = (state) => ({
+  isDataLoaded: state.isDataLoaded,
+  offers: state.offers,
+});
+
+export {App};
+export default connect(mapStateToProps, null)(App);

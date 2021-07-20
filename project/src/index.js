@@ -7,16 +7,17 @@ import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import App from './components/app/app';
 import reviews from './mocks/reviews';
-import {Cities} from './const';
+import {AuthorizationStatus, Cities} from './const';
 import {reducer} from './store/reducer';
-import {fetchOffers} from './store/api-actions';
+import {checkAuth, fetchOffers} from './store/api-actions';
+import {ActionCreator} from './store/action';
 
 const Setting = {
   DEFAULT_CITY: Cities.PARIS,
 };
 
 const api = createAPI(
-  () => {},
+  () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)),
 );
 
 const store = createStore(
@@ -26,6 +27,7 @@ const store = createStore(
   ),
 );
 
+store.dispatch(checkAuth());
 store.dispatch(fetchOffers());
 
 ReactDOM.render(

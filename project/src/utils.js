@@ -1,4 +1,4 @@
-import {AccommodationType, MAXIMUM_RATING} from './const';
+import {AccommodationType, AuthorizationStatus, MAXIMUM_RATING} from './const';
 
 export const getRatingPercent = (rating) => Math.round(rating) * 100 / MAXIMUM_RATING;
 
@@ -28,3 +28,6 @@ export const getMapPoints = (offers, activeOffer) => offers
     }
     return offer.location;
   });
+
+export const isCheckedAuth = (authorizationStatus) =>
+  authorizationStatus === AuthorizationStatus.UNKNOWN;

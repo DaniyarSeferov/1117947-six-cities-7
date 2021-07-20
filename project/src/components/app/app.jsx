@@ -10,11 +10,12 @@ import {AppRoute, NEIGHBOURS_COUNT} from '../../const';
 import {cityNameProp, offerProp, reviewProp} from '../room-screen/room-screen.prop';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {connect} from 'react-redux';
+import {isCheckedAuth} from '../../utils';
 
 function App(props) {
-  const {city, offers, reviews, isDataLoaded} = props;
+  const {city, offers, reviews, isDataLoaded, authorizationStatus} = props;
 
-  if (!isDataLoaded) {
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return (
       <SpinnerScreen />
     );
@@ -64,11 +65,13 @@ App.propTypes = {
   offers: PropTypes.arrayOf(offerProp).isRequired,
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
   isDataLoaded: PropTypes.bool.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isDataLoaded: state.isDataLoaded,
   offers: state.offers,
+  authorizationStatus: state.authorizationStatus,
 });
 
 export {App};

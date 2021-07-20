@@ -5,7 +5,7 @@ import {offerProp} from '../room-screen/room-screen.prop';
 import FavoritesList from '../favorites-list/favorites-list';
 
 function FavoritesScreen(props) {
-  const offers = props.offers.filter((offer) => offer.isFavorite);
+  const {offers} = props;
 
   return (
     <div className="page">

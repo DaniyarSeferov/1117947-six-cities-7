@@ -11,6 +11,7 @@ import {cityNameProp, offerProp, reviewProp} from '../room-screen/room-screen.pr
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {connect} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
+import PrivateRoute from '../private-route/private-route';
 
 function App(props) {
   const {city, offers, reviews, isDataLoaded, authorizationStatus} = props;
@@ -33,11 +34,15 @@ function App(props) {
         <Route exact path={AppRoute.SIGN_IN}>
           <SignInScreen />
         </Route>
-        <Route exact path={AppRoute.FAVORITES}>
-          <FavoritesScreen
-            offers={offers}
-          />
-        </Route>
+        <PrivateRoute
+          exact
+          path={AppRoute.FAVORITES}
+          render={() => (
+            <FavoritesScreen
+              offers={offers.filter((offer) => offer.isFavorite)}
+            />
+          )}
+        />
         <Route exact
           path={AppRoute.ROOM}
           render={(routeProps) => {

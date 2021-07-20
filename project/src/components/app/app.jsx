@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from '../../browser-history';
+import AnonymousRoute from '../anonymous-route/anonymous-route';
 
 function App(props) {
   const {city, offers, reviews, isDataLoaded, authorizationStatus} = props;
@@ -32,9 +33,13 @@ function App(props) {
             offers={offers}
           />
         </Route>
-        <Route exact path={AppRoute.SIGN_IN}>
-          <SignInScreen />
-        </Route>
+        <AnonymousRoute
+          exact
+          path={AppRoute.SIGN_IN}
+          render={() => (
+            <SignInScreen />
+          )}
+        />
         <PrivateRoute
           exact
           path={AppRoute.FAVORITES}

@@ -18,8 +18,11 @@ export const checkAuth = () => (dispatch, _getState, api) => (
 export const login = ({login: email, password}) => (dispatch, _getState, api) => (
   api.post(APIRoute.LOGIN, {email, password})
     .then(({data}) => adaptUserDataToClient(data))
+    .then((data) => {
+      localStorage.setItem('token', data.token);
+      return data;
+    })
     .then((data) => dispatch(ActionCreator.getUserData(data)))
-    .then((data) => localStorage.setItem('token', data.token))
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
     .then(() => dispatch(ActionCreator.redirectToRoute(AppRoute.ROOT)))
 );

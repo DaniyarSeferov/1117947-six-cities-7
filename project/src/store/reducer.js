@@ -6,6 +6,7 @@ const initialState = {
   offers: [],
   isDataLoaded: false,
   authorizationStatus: AuthorizationStatus.UNKNOWN,
+  user: {},
 };
 
 const reducer = (state = initialState, action) => {

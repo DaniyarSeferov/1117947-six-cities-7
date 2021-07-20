@@ -1,9 +1,10 @@
-import {ActionCreator} from './action';
+import {ActionCreator, adaptToClient} from './action';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
 
 export const fetchOffers = () => (dispatch, _getState, api) => (
   api.get(APIRoute.OFFERS)
-    .then(({data}) => dispatch(ActionCreator.loadOffers(data)))
+    .then(({data}) => data.map(adaptToClient))
+    .then((data) => dispatch(ActionCreator.loadOffers(data)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (

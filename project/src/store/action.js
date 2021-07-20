@@ -13,7 +13,7 @@ export const ActionCreator = {
   }),
   loadOffers: (offers) => ({
     type: ActionType.LOAD_OFFERS,
-    payload: offers.map(adaptToClient),
+    payload: offers,
   }),
   requireAuthorization: (status) => ({
     type: ActionType.REQUIRED_AUTHORIZATION,
@@ -28,7 +28,7 @@ export const ActionCreator = {
   }),
 };
 
-const adaptToClient = (offer) => {
+export const adaptToClient = (offer) => {
   const adaptedOffer = Object.assign(
     {},
     offer,

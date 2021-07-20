@@ -1,8 +1,12 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const';
+import {logout} from '../../store/api-actions';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
-function Header() {
+function Header(props) {
+  const {logoutUser} = props;
 
   return (
     <header className="header">
@@ -23,7 +27,15 @@ function Header() {
                 </Link>
               </li>
               <li className="header__nav-item">
-                <Link className="header__nav-link" to="#">
+                <Link
+                  className="header__nav-link"
+                  onClick={(evt) => {
+                    evt.preventDefault();
+
+                    logoutUser();
+                  }}
+                  to='/'
+                >
                   <span className="header__signout">Sign out</span>
                 </Link>
               </li>
@@ -35,4 +47,15 @@ function Header() {
   );
 }
 
-export default Header;
+Header.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  logoutUser() {
+    dispatch(logout());
+  },
+});
+
+export {Header};
+export default connect(null, mapDispatchToProps)(Header);

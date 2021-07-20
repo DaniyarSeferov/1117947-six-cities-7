@@ -72,6 +72,7 @@ const mapStateToProps = (state) => ({
   isDataLoaded: state.isDataLoaded,
   offers: state.offers,
   authorizationStatus: state.authorizationStatus,
+  city: state.city,
 });
 
 export {App};

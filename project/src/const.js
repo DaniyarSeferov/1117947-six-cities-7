@@ -47,6 +47,8 @@ export const SortingOption = {
 
 export const APIRoute = {
   OFFERS: '/hotels',
+  LOGIN: '/login',
+  LOGOUT: '/logout',
 };
 
 export const AuthorizationStatus = {

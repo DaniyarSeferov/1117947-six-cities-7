@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Route, Switch, Router as BrowserRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MainScreen from '../main-screen/main-screen';
 import SignInScreen from '../sign-in-screen/sign-in-screen';
@@ -12,6 +12,7 @@ import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {connect} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
 import PrivateRoute from '../private-route/private-route';
+import browserHistory from '../../browser-history';
 
 function App(props) {
   const {city, offers, reviews, isDataLoaded, authorizationStatus} = props;
@@ -23,7 +24,7 @@ function App(props) {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.ROOT}>
           <MainScreen

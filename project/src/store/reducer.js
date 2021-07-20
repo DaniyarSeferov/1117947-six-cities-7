@@ -29,10 +29,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         authorizationStatus: action.payload,
       };
+    case ActionType.GET_USER_DATA:
+      return {
+        ...state,
+        user: action.payload,
+      };
     case ActionType.LOGOUT:
       return {
         ...state,
         authorizationStatus: AuthorizationStatus.NO_AUTH,
+        user: {},
       };
     default:
       return state;

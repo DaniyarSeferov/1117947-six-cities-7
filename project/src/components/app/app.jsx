@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Route, Switch, Router as BrowserRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MainScreen from '../main-screen/main-screen';
 import SignInScreen from '../sign-in-screen/sign-in-screen';
@@ -10,18 +10,22 @@ import {AppRoute, NEIGHBOURS_COUNT} from '../../const';
 import {cityNameProp, offerProp, reviewProp} from '../room-screen/room-screen.prop';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {connect} from 'react-redux';
+import {isCheckedAuth} from '../../utils';
+import PrivateRoute from '../private-route/private-route';
+import browserHistory from '../../browser-history';
+import AnonymousRoute from '../anonymous-route/anonymous-route';
 
 function App(props) {
-  const {city, offers, reviews, isDataLoaded} = props;
+  const {city, offers, reviews, isDataLoaded, authorizationStatus} = props;
 
-  if (!isDataLoaded) {
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return (
       <SpinnerScreen />
     );
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.ROOT}>
           <MainScreen
@@ -29,14 +33,22 @@ function App(props) {
             offers={offers}
           />
         </Route>
-        <Route exact path={AppRoute.SIGN_IN}>
-          <SignInScreen />
-        </Route>
-        <Route exact path={AppRoute.FAVORITES}>
-          <FavoritesScreen
-            offers={offers}
-          />
-        </Route>
+        <AnonymousRoute
+          exact
+          path={AppRoute.SIGN_IN}
+          render={() => (
+            <SignInScreen />
+          )}
+        />
+        <PrivateRoute
+          exact
+          path={AppRoute.FAVORITES}
+          render={() => (
+            <FavoritesScreen
+              offers={offers.filter((offer) => offer.isFavorite)}
+            />
+          )}
+        />
         <Route exact
           path={AppRoute.ROOM}
           render={(routeProps) => {
@@ -64,11 +76,14 @@ App.propTypes = {
   offers: PropTypes.arrayOf(offerProp).isRequired,
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
   isDataLoaded: PropTypes.bool.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isDataLoaded: state.isDataLoaded,
   offers: state.offers,
+  authorizationStatus: state.authorizationStatus,
+  city: state.city,
 });
 
 export {App};

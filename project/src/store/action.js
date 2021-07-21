@@ -1,6 +1,10 @@
 export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
+  REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
+  GET_USER_DATA: 'user/data',
+  LOGOUT: 'user/logout',
+  REDIRECT_TO_ROUTE: 'page/redirectToRoute',
 };
 
 export const ActionCreator = {
@@ -10,11 +14,26 @@ export const ActionCreator = {
   }),
   loadOffers: (offers) => ({
     type: ActionType.LOAD_OFFERS,
-    payload: offers.map(adaptToClient),
+    payload: offers,
+  }),
+  requireAuthorization: (status) => ({
+    type: ActionType.REQUIRED_AUTHORIZATION,
+    payload: status,
+  }),
+  getUserData: (user) => ({
+    type: ActionType.GET_USER_DATA,
+    payload: user,
+  }),
+  logout: () => ({
+    type: ActionType.LOGOUT,
+  }),
+  redirectToRoute: (url) => ({
+    type: ActionType.REDIRECT_TO_ROUTE,
+    payload: url,
   }),
 };
 
-const adaptToClient = (offer) => {
+export const adaptToClient = (offer) => {
   const adaptedOffer = Object.assign(
     {},
     offer,
@@ -42,4 +61,20 @@ const adaptToClient = (offer) => {
   delete adaptedOffer.preview_image;
 
   return adaptedOffer;
+};
+
+export const adaptUserDataToClient = (user) => {
+  const adaptedUserData = Object.assign(
+    {},
+    user,
+    {
+      avatarUrl: user.avatar_url,
+      isPro: user.is_pro,
+    },
+  );
+
+  delete adaptedUserData.avatar_url;
+  delete adaptedUserData.is_pro;
+
+  return adaptedUserData;
 };

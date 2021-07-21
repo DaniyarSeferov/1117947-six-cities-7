@@ -1,10 +1,12 @@
 import {ActionType} from './action';
-import {Cities} from '../const';
+import {AuthorizationStatus, Cities} from '../const';
 
 const initialState = {
   city: Cities.PARIS,
   offers: [],
   isDataLoaded: false,
+  authorizationStatus: AuthorizationStatus.UNKNOWN,
+  user: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -22,6 +24,22 @@ const reducer = (state = initialState, action) => {
         isDataLoaded: true,
       };
     }
+    case ActionType.REQUIRED_AUTHORIZATION:
+      return {
+        ...state,
+        authorizationStatus: action.payload,
+      };
+    case ActionType.GET_USER_DATA:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case ActionType.LOGOUT:
+      return {
+        ...state,
+        authorizationStatus: AuthorizationStatus.NO_AUTH,
+        user: {},
+      };
     default:
       return state;
   }

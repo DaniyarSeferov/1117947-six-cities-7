@@ -27,7 +27,7 @@ function useMap(mapRef, city) {
     } else if (mapRef.current !== null && map !== null) {
       map.setView(new leaflet.LatLng(location.latitude, location.longitude), location.zoom);
     }
-  }, [mapRef, map, city.name]);
+  }, [mapRef, map, city.name, location.latitude, location.longitude, location.zoom]);
 
   return map;
 }

@@ -7,32 +7,31 @@ import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import App from './components/app/app';
 import reviews from './mocks/reviews';
-import {Cities} from './const';
+import {AuthorizationStatus} from './const';
 import {reducer} from './store/reducer';
-import {fetchOffers} from './store/api-actions';
-
-const Setting = {
-  DEFAULT_CITY: Cities.PARIS,
-};
+import {checkAuth, fetchOffers} from './store/api-actions';
+import {ActionCreator} from './store/action';
+import {redirect} from './store/middlewares/redirect';
 
 const api = createAPI(
-  () => {},
+  () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)),
 );
 
 const store = createStore(
   reducer,
   composeWithDevTools(
     applyMiddleware(thunk.withExtraArgument(api)),
+    applyMiddleware(redirect),
   ),
 );
 
+store.dispatch(checkAuth());
 store.dispatch(fetchOffers());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <App
-        city={Setting.DEFAULT_CITY}
         reviews={reviews}
       />
     </Provider>

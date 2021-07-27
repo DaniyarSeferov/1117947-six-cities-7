@@ -1,6 +1,8 @@
 export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
+  LOAD_OFFER: 'data/loadOffer',
+  START_LOADING: 'data/startLoading',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   GET_USER_DATA: 'user/data',
   LOGOUT: 'user/logout',
@@ -15,6 +17,13 @@ export const ActionCreator = {
   loadOffers: (offers) => ({
     type: ActionType.LOAD_OFFERS,
     payload: offers,
+  }),
+  loadOffer: (offer) => ({
+    type: ActionType.LOAD_OFFER,
+    payload: offer,
+  }),
+  startLoading: () => ({
+    type: ActionType.START_LOADING,
   }),
   requireAuthorization: (status) => ({
     type: ActionType.REQUIRED_AUTHORIZATION,

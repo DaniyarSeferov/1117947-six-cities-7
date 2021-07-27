@@ -1,21 +1,33 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../header/header';
 import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
-import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent} from '../../utils';
+import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent, isEmptyObject} from '../../utils';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import {OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
+import {connect} from 'react-redux';
+import {ActionCreator} from '../../store/action';
+import {fetchOffer} from '../../store/api-actions';
 
 function RoomScreen(props) {
   const [activeOffer, setActiveOffer] = useState(null);
-  const {offer, reviews, neighbours} = props;
-  const {images, isPremium, title, isFavorite, bedrooms, maxAdults, price, goods, rating, host, description, city} = offer;
+  const { id } = props.match.params;
+  const {offer, getOfferData} = props;
+
+  useEffect(() => {
+    if (isEmptyObject(offer)) {
+      getOfferData(id);
+    }
+  }, []);
+
+  const {reviews = [], neighbours = []} = props;
+  const {images = [], isPremium, title, isFavorite, bedrooms, maxAdults, price, goods = [], rating, host, description, city} = offer;
   let {type} = offer;
   const ratingPercent = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
-  const {avatarUrl, isPro, name} = host;
+  const {avatarUrl = '', isPro = false, name = ''} = host || {};
   const points = getMapPoints(neighbours, activeOffer);
 
   return (
@@ -113,14 +125,15 @@ function RoomScreen(props) {
               <ReviewsList reviews={reviews}/>
             </div>
           </div>
-          <Map city={city} points={points} render={(mapRef) => (
-            <section
-              className="property__map map"
-              ref={mapRef}
-            >
-            </section>
-          )}
-          />
+          {city && (
+            <Map city={city} points={points} render={(mapRef) => (
+              <section
+                className="property__map map"
+                ref={mapRef}
+              >
+              </section>
+            )}
+            />)}
         </section>
         <div className="container">
           <section className="near-places places">
@@ -142,6 +155,20 @@ RoomScreen.propTypes = {
   offer: offerProp.isRequired,
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
   neighbours: PropTypes.arrayOf(offerProp).isRequired,
+  getOfferData: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
-export default RoomScreen;
+const mapStateToProps = (state) => ({
+  offer: state.offer,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getOfferData(id) {
+    dispatch(ActionCreator.startLoading());
+    dispatch(fetchOffer(id));
+  },
+});
+
+export {RoomScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(RoomScreen);

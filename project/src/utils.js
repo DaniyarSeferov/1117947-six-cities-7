@@ -31,3 +31,6 @@ export const getMapPoints = (offers, activeOffer) => offers
 
 export const isCheckedAuth = (authorizationStatus) =>
   authorizationStatus === AuthorizationStatus.UNKNOWN;
+
+export const isEmptyObject = (currentObject) =>
+  Object.keys(currentObject).length === 0;

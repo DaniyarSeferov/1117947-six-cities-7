@@ -7,6 +7,12 @@ export const fetchOffers = () => (dispatch, _getState, api) => (
     .then((data) => dispatch(ActionCreator.loadOffers(data)))
 );
 
+export const fetchOffer = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.OFFERS}/${id}`)
+    .then(({data}) => adaptToClient(data))
+    .then((data) => dispatch(ActionCreator.loadOffer(data)))
+);
+
 export const checkAuth = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGIN)
     .then(({data}) => adaptUserDataToClient(data))

@@ -13,9 +13,10 @@ import {checkAuth, fetchOffers} from './store/api-actions';
 import {ActionCreator} from './store/action';
 import {redirect} from './store/middlewares/redirect';
 
-const api = createAPI(
-  () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)),
-);
+const api = createAPI({
+  onUnauthorized: () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)),
+  onNotFound: () => store.dispatch(ActionCreator.redirectToRoute('/404')),
+});
 
 const store = createStore(
   reducer,

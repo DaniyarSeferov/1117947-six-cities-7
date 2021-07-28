@@ -14,15 +14,15 @@ import {fetchOfferData} from '../../store/api-actions';
 function RoomScreen(props) {
   const [activeOffer, setActiveOffer] = useState(null);
   const { id } = props.match.params;
-  const {offer, getOfferData} = props;
+  const {offer = {}, getOfferData} = props;
 
   useEffect(() => {
     if (isEmptyObject(offer)) {
       getOfferData(id);
     }
-  }, []);
+  }, [id]);
 
-  const {reviews, neighbours = []} = props;
+  const {reviews, neighbours} = props;
   const {images = [], isPremium, title, isFavorite, bedrooms, maxAdults, price, goods = [], rating, host, description, city} = offer;
   let {type} = offer;
   const ratingPercent = getRatingPercent(rating);

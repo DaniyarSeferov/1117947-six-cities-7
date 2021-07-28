@@ -3,21 +3,25 @@ import CommentForm from '../comment-form/comment-form';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Review from '../review/review';
+import {connect} from 'react-redux';
+import {AuthorizationStatus, MAXIMUM_REVIEWS} from '../../const';
+import {sortReviews} from '../../utils';
 
 function ReviewsList(props) {
-  const {reviews} = props;
+  const {reviews, authorizationStatus} = props;
+  const sortedReviews = reviews.sort(sortReviews).slice(0, MAXIMUM_REVIEWS);
 
   return (
     <section className="property__reviews reviews">
-      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
+      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{sortedReviews.length}</span></h2>
       <ul className="reviews__list">
-        {reviews.map((review) => (
+        {sortedReviews.map((review) => (
           <li key={review.id} className="reviews__item">
             <Review review={review} />
           </li>
         ))}
       </ul>
-      <CommentForm />
+      {authorizationStatus === AuthorizationStatus.AUTH && <CommentForm/>}
     </section>
   );
 }
@@ -25,6 +29,12 @@ function ReviewsList(props) {
 
 ReviewsList.propTypes = {
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
-export default ReviewsList;
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+});
+
+export {ReviewsList};
+export default connect(mapStateToProps, null)(ReviewsList);

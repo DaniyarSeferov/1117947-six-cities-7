@@ -152,9 +152,9 @@ function RoomScreen(props) {
 }
 
 RoomScreen.propTypes = {
-  offer: offerProp.isRequired,
-  reviews: PropTypes.arrayOf(reviewProp).isRequired,
-  neighbours: PropTypes.arrayOf(offerProp).isRequired,
+  offer: offerProp,
+  reviews: PropTypes.arrayOf(reviewProp),
+  neighbours: PropTypes.arrayOf(offerProp),
   getOfferData: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
 };

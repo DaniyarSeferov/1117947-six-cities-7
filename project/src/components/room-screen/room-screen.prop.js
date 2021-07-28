@@ -17,25 +17,25 @@ const locationProp = PropTypes.shape({
 const cityNameProp = PropTypes.oneOf(Object.values(Cities));
 
 const offerProp = PropTypes.shape({
-  bedrooms: PropTypes.number.isRequired,
+  bedrooms: PropTypes.number,
   city: PropTypes.shape({
     location: locationProp.isRequired,
     name: cityNameProp.isRequired,
-  }).isRequired,
-  description: PropTypes.string.isRequired,
+  }),
+  description: PropTypes.string,
   goods: PropTypes.arrayOf(PropTypes.string),
-  host: userProp.isRequired,
-  id: PropTypes.number.isRequired,
+  host: userProp,
+  id: PropTypes.number,
   images: PropTypes.arrayOf(PropTypes.string),
-  isFavorite: PropTypes.bool.isRequired,
-  isPremium: PropTypes.bool.isRequired,
-  location: locationProp.isRequired,
-  maxAdults: PropTypes.number.isRequired,
-  previewImage: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  rating: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  isFavorite: PropTypes.bool,
+  isPremium: PropTypes.bool,
+  location: locationProp,
+  maxAdults: PropTypes.number,
+  previewImage: PropTypes.string,
+  price: PropTypes.number,
+  rating: PropTypes.number,
+  title: PropTypes.string,
+  type: PropTypes.string,
 });
 
 const reviewProp = PropTypes.shape({

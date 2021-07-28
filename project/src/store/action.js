@@ -2,8 +2,6 @@ export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
   LOAD_OFFER: 'data/loadOffer',
-  LOAD_COMMENTS: 'data/loadComments',
-  LOAD_NEIGHBOURS: 'data/loadNeighbours',
   START_LOADING: 'data/startLoading',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   GET_USER_DATA: 'user/data',
@@ -20,17 +18,9 @@ export const ActionCreator = {
     type: ActionType.LOAD_OFFERS,
     payload: offers,
   }),
-  loadOffer: (offer) => ({
+  loadOffer: (offerData) => ({
     type: ActionType.LOAD_OFFER,
-    payload: offer,
-  }),
-  loadComments: (comments) => ({
-    type: ActionType.LOAD_COMMENTS,
-    payload: comments,
-  }),
-  loadNeighbours: (neighbours) => ({
-    type: ActionType.LOAD_NEIGHBOURS,
-    payload: neighbours,
+    payload: offerData,
   }),
   startLoading: () => ({
     type: ActionType.START_LOADING,

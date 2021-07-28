@@ -30,20 +30,10 @@ const reducer = (state = initialState, action) => {
     case ActionType.LOAD_OFFER: {
       return {
         ...state,
-        offer: action.payload,
+        offer: action.payload.offer,
+        comments: action.payload.comments,
+        neighbours: action.payload.neighbours,
         isDataLoaded: true,
-      };
-    }
-    case ActionType.LOAD_COMMENTS: {
-      return {
-        ...state,
-        comments: action.payload,
-      };
-    }
-    case ActionType.LOAD_NEIGHBOURS: {
-      return {
-        ...state,
-        neighbours: action.payload,
       };
     }
     case ActionType.START_LOADING: {

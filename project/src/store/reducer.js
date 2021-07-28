@@ -5,6 +5,7 @@ const initialState = {
   city: Cities.PARIS,
   offers: [],
   offer: {},
+  comments: [],
   isDataLoaded: false,
   authorizationStatus: AuthorizationStatus.UNKNOWN,
   user: {},
@@ -30,6 +31,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         offer: action.payload,
         isDataLoaded: true,
+      };
+    }
+    case ActionType.LOAD_COMMENTS: {
+      return {
+        ...state,
+        comments: action.payload,
       };
     }
     case ActionType.START_LOADING: {

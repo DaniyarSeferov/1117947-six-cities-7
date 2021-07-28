@@ -47,6 +47,7 @@ export const SortingOption = {
 
 export const APIRoute = {
   OFFERS: '/hotels',
+  COMMENTS: '/comments',
   LOGIN: '/login',
   LOGOUT: '/logout',
 };

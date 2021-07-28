@@ -2,6 +2,7 @@ export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
   LOAD_OFFER: 'data/loadOffer',
+  LOAD_COMMENTS: 'data/loadComments',
   START_LOADING: 'data/startLoading',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   GET_USER_DATA: 'user/data',
@@ -21,6 +22,10 @@ export const ActionCreator = {
   loadOffer: (offer) => ({
     type: ActionType.LOAD_OFFER,
     payload: offer,
+  }),
+  loadComments: (comments) => ({
+    type: ActionType.LOAD_COMMENTS,
+    payload: comments,
   }),
   startLoading: () => ({
     type: ActionType.START_LOADING,
@@ -86,4 +91,26 @@ export const adaptUserDataToClient = (user) => {
   delete adaptedUserData.is_pro;
 
   return adaptedUserData;
+};
+
+export const adaptCommentToClient = (comment) => {
+  const adaptedCommentData = Object.assign(
+    {},
+    comment,
+    {
+      user: Object.assign(
+        {},
+        comment.user,
+        {
+          avatarUrl: comment.user.avatar_url,
+          isPro: comment.user.is_pro,
+        },
+      ),
+    },
+  );
+
+  delete adaptedCommentData.user.avatar_url;
+  delete adaptedCommentData.user.is_pro;
+
+  return adaptedCommentData;
 };

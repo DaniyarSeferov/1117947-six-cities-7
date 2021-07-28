@@ -1,4 +1,4 @@
-import {ActionCreator, adaptToClient, adaptUserDataToClient} from './action';
+import {ActionCreator, adaptCommentToClient, adaptToClient, adaptUserDataToClient} from './action';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
 
 export const fetchOffers = () => (dispatch, _getState, api) => (
@@ -11,6 +11,12 @@ export const fetchOffer = (id) => (dispatch, _getState, api) => (
   api.get(`${APIRoute.OFFERS}/${id}`)
     .then(({data}) => adaptToClient(data))
     .then((data) => dispatch(ActionCreator.loadOffer(data)))
+);
+
+export const fetchComments = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.COMMENTS}/${id}`)
+    .then(({data}) => data.map(adaptCommentToClient))
+    .then((data) => dispatch(ActionCreator.loadComments(data)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (

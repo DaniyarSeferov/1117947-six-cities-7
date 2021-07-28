@@ -19,6 +19,12 @@ export const fetchComments = (id) => (dispatch, _getState, api) => (
     .then((data) => dispatch(ActionCreator.loadComments(data)))
 );
 
+export const fetchNeighbours = (id) => (dispatch, _getState, api) => (
+  api.get(APIRoute.NEARBY.replace(/:hotel_id/, id))
+    .then(({data}) => data.map(adaptToClient))
+    .then((data) => dispatch(ActionCreator.loadNeighbours(data)))
+);
+
 export const checkAuth = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGIN)
     .then(({data}) => adaptUserDataToClient(data))

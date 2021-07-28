@@ -6,6 +6,7 @@ const initialState = {
   offers: [],
   offer: {},
   comments: [],
+  neighbours: [],
   isDataLoaded: false,
   authorizationStatus: AuthorizationStatus.UNKNOWN,
   user: {},
@@ -37,6 +38,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         comments: action.payload,
+      };
+    }
+    case ActionType.LOAD_NEIGHBOURS: {
+      return {
+        ...state,
+        neighbours: action.payload,
       };
     }
     case ActionType.START_LOADING: {

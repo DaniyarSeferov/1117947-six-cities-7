@@ -9,7 +9,7 @@ import {OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
 import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
-import {fetchComments, fetchOffer} from '../../store/api-actions';
+import {fetchComments, fetchNeighbours, fetchOffer} from '../../store/api-actions';
 
 function RoomScreen(props) {
   const [activeOffer, setActiveOffer] = useState(null);
@@ -162,6 +162,7 @@ RoomScreen.propTypes = {
 const mapStateToProps = (state) => ({
   offer: state.offer,
   reviews: state.comments,
+  neighbours: state.neighbours,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -169,6 +170,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator.startLoading());
     dispatch(fetchOffer(id));
     dispatch(fetchComments(id));
+    dispatch(fetchNeighbours(id));
   },
 });
 

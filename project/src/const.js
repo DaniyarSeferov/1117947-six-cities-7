@@ -22,6 +22,8 @@ export const AccommodationType = {
 };
 
 export const MAXIMUM_RATING = 5;
+export const MAXIMUM_OFFER_IMAGES = 6;
+export const MAXIMUM_NEIGHBOURS = 3;
 
 export const RatingType = {
   PERFECT: 'perfect',

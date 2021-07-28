@@ -1,34 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Header from '../header/header';
 import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent, isEmptyObject} from '../../utils';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
-import {OfferListType} from '../../const';
+import {MAXIMUM_NEIGHBOURS, MAXIMUM_OFFER_IMAGES, OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
 import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
 import {fetchOfferData} from '../../store/api-actions';
 
 function RoomScreen(props) {
-  const [activeOffer, setActiveOffer] = useState(null);
   const { id } = props.match.params;
   const {offer = {}, getOfferData} = props;
 
   useEffect(() => {
-    if (isEmptyObject(offer)) {
+    if (isEmptyObject(offer) || (offer.id !== Number(id))) {
       getOfferData(id);
     }
   }, [id]);
 
-  const {reviews, neighbours} = props;
+  const {reviews} = props;
+  let {neighbours = []} = props;
   const {images = [], isPremium, title, isFavorite, bedrooms, maxAdults, price, goods = [], rating, host, description, city} = offer;
   let {type} = offer;
   const ratingPercent = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
   const {avatarUrl = '', isPro = false, name = ''} = host || {};
-  const points = getMapPoints(neighbours, activeOffer);
+  neighbours = neighbours.slice(0, MAXIMUM_NEIGHBOURS);
+  const neighboursCopy = neighbours.slice();
+  neighboursCopy.push(offer);
+  const points = !isEmptyObject(offer) ? getMapPoints(neighboursCopy, offer) : [];
 
   return (
     <div className="page">
@@ -38,7 +41,7 @@ function RoomScreen(props) {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {images.map((image, index) => {
+              {images.slice(0, MAXIMUM_OFFER_IMAGES).map((image, index) => {
                 const keyValue = `${index}-${image}`;
                 return (
                   <div key={keyValue} className="property__image-wrapper">
@@ -133,7 +136,8 @@ function RoomScreen(props) {
               >
               </section>
             )}
-            />)}
+            />
+          )}
         </section>
         <div className="container">
           <section className="near-places places">
@@ -142,7 +146,7 @@ function RoomScreen(props) {
               className="near-places__list"
               offers={neighbours}
               type={OfferListType.NEIGHBOURS}
-              onHover={setActiveOffer}
+              onHover={() => {}}
             />
           </section>
         </div>

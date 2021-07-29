@@ -1,6 +1,7 @@
 export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
+  LOAD_SINGLE_OFFER: 'data/loadSingleOffer',
   LOAD_OFFER: 'data/loadOffer',
   START_LOADING: 'data/startLoading',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
@@ -17,6 +18,10 @@ export const ActionCreator = {
   loadOffers: (offers) => ({
     type: ActionType.LOAD_OFFERS,
     payload: offers,
+  }),
+  loadSingleOffer: (offer) => ({
+    type: ActionType.LOAD_SINGLE_OFFER,
+    payload: offer,
   }),
   loadOffer: (offerData) => ({
     type: ActionType.LOAD_OFFER,

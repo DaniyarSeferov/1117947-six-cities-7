@@ -5,15 +5,15 @@ import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent, isEmptyObject} from '../../utils';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
-import {MAXIMUM_NEIGHBOURS, MAXIMUM_OFFER_IMAGES, OfferListType} from '../../const';
+import {AppRoute, AuthorizationStatus, MAXIMUM_NEIGHBOURS, MAXIMUM_OFFER_IMAGES, OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
 import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
-import {fetchOfferData} from '../../store/api-actions';
+import {fetchFavorite, fetchOfferData} from '../../store/api-actions';
 
 function RoomScreen(props) {
   const { id } = props.match.params;
-  const {offer = {}, getOfferData, reviews} = props;
+  const {offer = {}, getOfferData, reviews, setFavorite, authorizationStatus} = props;
   let {neighbours = []} = props;
 
   useEffect(() => {
@@ -61,7 +61,14 @@ function RoomScreen(props) {
                 <h1 className="property__name">
                   {title}
                 </h1>
-                <button className={`property__bookmark-button button ${isFavorite && 'property__bookmark-button--active'}`} type="button">
+                <button
+                  className={`property__bookmark-button button ${isFavorite && 'property__bookmark-button--active'}`}
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setFavorite(id, Number(!isFavorite), authorizationStatus);
+                  }}
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -159,19 +166,29 @@ RoomScreen.propTypes = {
   reviews: PropTypes.arrayOf(reviewProp),
   neighbours: PropTypes.arrayOf(offerProp),
   getOfferData: PropTypes.func.isRequired,
+  setFavorite: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   offer: state.offer,
   reviews: state.comments,
   neighbours: state.neighbours,
+  authorizationStatus: state.authorizationStatus,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getOfferData(id) {
     dispatch(ActionCreator.startLoading());
     dispatch(fetchOfferData(id));
+  },
+  setFavorite(id, status, authorizationStatus) {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(fetchFavorite(id, status));
+    } else {
+      dispatch(ActionCreator.redirectToRoute(AppRoute.SIGN_IN));
+    }
   },
 });
 

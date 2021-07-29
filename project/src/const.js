@@ -3,6 +3,7 @@ export const AppRoute = {
   ROOT: '/',
   SIGN_IN: '/login',
   ROOM: '/offer/:id',
+  NOT_FOUND: '/404',
 };
 
 export const Cities = {
@@ -52,6 +53,7 @@ export const APIRoute = {
   OFFERS: '/hotels',
   COMMENTS: '/comments',
   NEARBY: '/hotels/:hotelId/nearby',
+  FAVORITE: '/favorite/:hotelId/:status',
   LOGIN: '/login',
   LOGOUT: '/logout',
 };

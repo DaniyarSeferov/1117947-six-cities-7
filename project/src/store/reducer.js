@@ -27,6 +27,12 @@ const reducer = (state = initialState, action) => {
         isDataLoaded: true,
       };
     }
+    case ActionType.LOAD_SINGLE_OFFER: {
+      return {
+        ...state,
+        offer: action.payload,
+      };
+    }
     case ActionType.LOAD_OFFER: {
       return {
         ...state,

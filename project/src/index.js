@@ -7,7 +7,7 @@ import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import App from './components/app/app';
 import reviews from './mocks/reviews';
-import {AuthorizationStatus} from './const';
+import {AppRoute, AuthorizationStatus} from './const';
 import {reducer} from './store/reducer';
 import {checkAuth, fetchOffers} from './store/api-actions';
 import {ActionCreator} from './store/action';
@@ -15,7 +15,7 @@ import {redirect} from './store/middlewares/redirect';
 
 const api = createAPI({
   onUnauthorized: () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)),
-  onNotFound: () => store.dispatch(ActionCreator.redirectToRoute('/404')),
+  onNotFound: () => store.dispatch(ActionCreator.redirectToRoute(AppRoute.NOT_FOUND)),
 });
 
 const store = createStore(

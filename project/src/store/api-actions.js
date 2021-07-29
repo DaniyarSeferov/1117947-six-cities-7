@@ -58,3 +58,11 @@ export const logout = () => (dispatch, _getState, api) => (
     .then(() => localStorage.removeItem('token'))
     .then(() => dispatch(ActionCreator.logout()))
 );
+
+export const fetchFavorite = (id, status) => (dispatch, _getState, api) => {
+  let url = APIRoute.FAVORITE.replace(/:hotelId/, id);
+  url = url.replace(/:status/, status);
+  return api.post(url)
+    .then(({data}) => adaptToClient(data))
+    .then((data) => dispatch(ActionCreator.loadSingleOffer(data)));
+};

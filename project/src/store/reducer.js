@@ -8,6 +8,7 @@ const initialState = {
   comments: [],
   neighbours: [],
   isDataLoaded: false,
+  isDataSent: true,
   authorizationStatus: AuthorizationStatus.UNKNOWN,
   user: {},
 };
@@ -46,12 +47,25 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         comments: action.payload,
+        isDataSent: true,
       };
     }
     case ActionType.START_LOADING: {
       return {
         ...state,
         isDataLoaded: false,
+      };
+    }
+    case ActionType.START_SENDING: {
+      return {
+        ...state,
+        isDataSent: false,
+      };
+    }
+    case ActionType.FINISH_SENDING: {
+      return {
+        ...state,
+        isDataSent: true,
       };
     }
     case ActionType.REQUIRED_AUTHORIZATION:

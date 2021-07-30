@@ -5,6 +5,8 @@ export const ActionType = {
   LOAD_OFFER: 'data/loadOffer',
   LOAD_COMMENTS: 'data/loadComments',
   START_LOADING: 'data/startLoading',
+  START_SENDING: 'data/startSending',
+  FINISH_SENDING: 'data/finishSending',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   GET_USER_DATA: 'user/data',
   LOGOUT: 'user/logout',
@@ -34,6 +36,12 @@ export const ActionCreator = {
   }),
   startLoading: () => ({
     type: ActionType.START_LOADING,
+  }),
+  startSending: () => ({
+    type: ActionType.START_SENDING,
+  }),
+  finishSending: () => ({
+    type: ActionType.FINISH_SENDING,
   }),
   requireAuthorization: (status) => ({
     type: ActionType.REQUIRED_AUTHORIZATION,

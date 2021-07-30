@@ -9,10 +9,11 @@ import useForm, {getValidators} from '../../hooks/use-form/use-form';
 import {connect} from 'react-redux';
 import {sendComment} from '../../store/api-actions';
 import PropTypes from 'prop-types';
+import {ActionCreator} from '../../store/action';
 
 function CommentForm(props) {
   const [isFormValid, setFormValid] = useState(false);
-  const {onSubmit, roomId} = props;
+  const {onSubmit, roomId, isDataSent} = props;
   const formRef = React.useRef(null);
   const validators = getValidators();
   const [getValue, clear, isValid] = useForm(formRef, {
@@ -70,6 +71,7 @@ function CommentForm(props) {
                   id={`${ratingValue}-stars`}
                   type="radio"
                   onChange={handleChange}
+                  disabled={!isDataSent}
                 />
                 <label htmlFor={`${ratingValue}-stars`} className="reviews__rating-label form__rating-label" title={ratingItem}>
                   <svg className="form__star-image" width="37" height="33">
@@ -84,6 +86,7 @@ function CommentForm(props) {
       <div className="form-control">
         <textarea
           onChange={handleChange}
+          disabled={!isDataSent}
           className="reviews__textarea form__textarea"
           id="review"
           name="review"
@@ -98,7 +101,7 @@ function CommentForm(props) {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={!isFormValid}
+          disabled={!isFormValid || !isDataSent}
         >
           Submit
         </button>
@@ -110,13 +113,19 @@ function CommentForm(props) {
 CommentForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
+  isDataSent: PropTypes.bool.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  isDataSent: state.isDataSent,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   onSubmit(id, comment) {
+    dispatch(ActionCreator.startSending());
     dispatch(sendComment(id, comment));
   },
 });
 
 export {CommentForm};
-export default connect(null, mapDispatchToProps)(CommentForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentForm);

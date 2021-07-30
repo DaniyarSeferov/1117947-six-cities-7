@@ -12,32 +12,32 @@ export const fetchOfferData = (id) => (dispatch, _getState, api) => (
     fetchOffer(id, api),
     fetchComments(id, api),
     fetchNeighbours(id, api),
-  ]).then(([offer, comments, neighbours]) => dispatch(ActionCreator.loadOffer({offer, comments, neighbours})))
+  ])
+    .then(([offer, comments, neighbours]) => dispatch(ActionCreator.loadOffer({offer, comments, neighbours})))
+    .catch(() => {})
 );
 
 export const fetchOffer = (id, api) => (
   api.get(`${APIRoute.OFFERS}/${id}`)
     .then(({data}) => adaptToClient(data))
-    .catch(() => {})
 );
 
 export const fetchComments = (id, api) => (
   api.get(`${APIRoute.COMMENTS}/${id}`)
     .then(({data}) => data.map(adaptCommentToClient))
-    .catch(() => [])
 );
 
 export const sendComment = (id, comment) => (dispatch, _getState, api) => {
   const url = APIRoute.COMMENT.replace(/:hotelId/, id);
   return api.post(url, comment)
     .then(({data}) => data.map(adaptCommentToClient))
-    .then((data) => dispatch(ActionCreator.loadComments(data)));
+    .then((data) => dispatch(ActionCreator.loadComments(data)))
+    .catch(() => dispatch(ActionCreator.finishSending()));
 };
 
 export const fetchNeighbours = (id, api) => (
   api.get(APIRoute.NEARBY.replace(/:hotelId/, id))
     .then(({data}) => data.map(adaptToClient))
-    .catch(() => [])
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (

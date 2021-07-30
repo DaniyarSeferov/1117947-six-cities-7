@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {COMMENT_MAXIMUM_LENGTH, COMMENT_MINIMUM_LENGTH, MAXIMUM_RATING, RatingType} from '../../const';
 import useForm, {getValidators} from '../../hooks/use-form/use-form';
 
 function CommentForm() {
+  const [isFormValid, setFormValid] = useState(false);
   const formRef = React.useRef(null);
   const validators = getValidators();
   const [getValue, clear, isValid] = useForm(formRef, {
@@ -16,17 +17,23 @@ function CommentForm() {
     }],
   });
 
+  const handleChange = (evt) => {
+    setFormValid(isValid(false));
+  };
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
     if (isValid()) {
+      const formValues = getValue();
       const formData = {
-        date: new Date().toLocaleDateString(),
-        ...getValue(),
+        comment: formValues.review,
+        rating: Number(formValues.rating),
       };
       /* eslint-disable no-console */
       console.log(formData);
 
+      setFormValid(false);
       clear();
     }
   };
@@ -53,6 +60,7 @@ function CommentForm() {
                   value={ratingValue}
                   id={`${ratingValue}-stars`}
                   type="radio"
+                  onChange={handleChange}
                 />
                 <label htmlFor={`${ratingValue}-stars`} className="reviews__rating-label form__rating-label" title={ratingItem}>
                   <svg className="form__star-image" width="37" height="33">
@@ -66,6 +74,7 @@ function CommentForm() {
       </div>
       <div className="form-control">
         <textarea
+          onChange={handleChange}
           className="reviews__textarea form__textarea"
           id="review"
           name="review"
@@ -77,7 +86,13 @@ function CommentForm() {
           To submit review please make sure to set <span className="reviews__star">rating</span> and
           describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled="">Submit</button>
+        <button
+          className="reviews__submit form__submit button"
+          type="submit"
+          disabled={!isFormValid}
+        >
+          Submit
+        </button>
       </div>
     </form>
   );

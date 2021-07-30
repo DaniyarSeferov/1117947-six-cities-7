@@ -21,7 +21,7 @@ function useForm(formRef, controls) {
     });
   };
 
-  const isValid = () => {
+  const isValid = (showErrorMessage = true) => {
     let isFormValid = true;
 
     Object.keys(controls).forEach((control) => {
@@ -30,11 +30,17 @@ function useForm(formRef, controls) {
       const errors = [];
 
       validators.forEach(({validator, error}) => {
-        isValidControl = validator(formRef.current[control].value) && isValidControl;
-        errors.push(error);
+        const isValidValidator = validator(formRef.current[control].value);
+        isValidControl = isValidValidator && isValidControl;
+
+        if (!isValidValidator) {
+          errors.push(error);
+        }
       });
 
-      isValidControl ? clearError(formRef.current[control]) : setError(formRef.current[control], errors);
+      if (showErrorMessage) {
+        isValidControl ? clearError(formRef.current[control]) : setError(formRef.current[control], errors);
+      }
 
       isFormValid = isFormValid && isValidControl;
     });

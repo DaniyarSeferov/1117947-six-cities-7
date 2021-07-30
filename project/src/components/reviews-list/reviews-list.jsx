@@ -8,7 +8,7 @@ import {AuthorizationStatus, MAXIMUM_REVIEWS} from '../../const';
 import {sortReviews} from '../../utils';
 
 function ReviewsList(props) {
-  const {reviews, authorizationStatus} = props;
+  const {reviews, authorizationStatus, roomId} = props;
   const sortedReviews = reviews.sort(sortReviews).slice(0, MAXIMUM_REVIEWS);
 
   return (
@@ -21,7 +21,7 @@ function ReviewsList(props) {
           </li>
         ))}
       </ul>
-      {authorizationStatus === AuthorizationStatus.AUTH && <CommentForm/>}
+      {authorizationStatus === AuthorizationStatus.AUTH && <CommentForm roomId={roomId}/>}
     </section>
   );
 }
@@ -30,6 +30,7 @@ function ReviewsList(props) {
 ReviewsList.propTypes = {
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
   authorizationStatus: PropTypes.string.isRequired,
+  roomId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

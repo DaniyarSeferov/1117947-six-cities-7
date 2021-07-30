@@ -1,9 +1,18 @@
 import React, {useState} from 'react';
-import {COMMENT_MAXIMUM_LENGTH, COMMENT_MINIMUM_LENGTH, MAXIMUM_RATING, RatingType} from '../../const';
+import {
+  COMMENT_MAXIMUM_LENGTH,
+  COMMENT_MINIMUM_LENGTH,
+  MAXIMUM_RATING,
+  RatingType
+} from '../../const';
 import useForm, {getValidators} from '../../hooks/use-form/use-form';
+import {connect} from 'react-redux';
+import {sendComment} from '../../store/api-actions';
+import PropTypes from 'prop-types';
 
-function CommentForm() {
+function CommentForm(props) {
   const [isFormValid, setFormValid] = useState(false);
+  const {onSubmit, roomId} = props;
   const formRef = React.useRef(null);
   const validators = getValidators();
   const [getValue, clear, isValid] = useForm(formRef, {
@@ -30,8 +39,8 @@ function CommentForm() {
         comment: formValues.review,
         rating: Number(formValues.rating),
       };
-      /* eslint-disable no-console */
-      console.log(formData);
+
+      onSubmit(roomId, formData);
 
       setFormValid(false);
       clear();
@@ -98,4 +107,16 @@ function CommentForm() {
   );
 }
 
-export default CommentForm;
+CommentForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  roomId: PropTypes.string.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit(id, comment) {
+    dispatch(sendComment(id, comment));
+  },
+});
+
+export {CommentForm};
+export default connect(null, mapDispatchToProps)(CommentForm);

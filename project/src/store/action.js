@@ -3,6 +3,7 @@ export const ActionType = {
   LOAD_OFFERS: 'data/loadOffers',
   LOAD_SINGLE_OFFER: 'data/loadSingleOffer',
   LOAD_OFFER: 'data/loadOffer',
+  LOAD_COMMENTS: 'data/loadComments',
   START_LOADING: 'data/startLoading',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   GET_USER_DATA: 'user/data',
@@ -26,6 +27,10 @@ export const ActionCreator = {
   loadOffer: (offerData) => ({
     type: ActionType.LOAD_OFFER,
     payload: offerData,
+  }),
+  loadComments: (comments) => ({
+    type: ActionType.LOAD_COMMENTS,
+    payload: comments,
   }),
   startLoading: () => ({
     type: ActionType.START_LOADING,

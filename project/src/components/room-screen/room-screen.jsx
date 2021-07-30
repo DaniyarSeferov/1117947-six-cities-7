@@ -9,7 +9,7 @@ import {AppRoute, AuthorizationStatus, MAXIMUM_NEIGHBOURS, MAXIMUM_OFFER_IMAGES,
 import OfferList from '../offer-list/offer-list';
 import {connect} from 'react-redux';
 import {ActionCreator} from '../../store/action';
-import {fetchFavorite, fetchOfferData} from '../../store/api-actions';
+import {sendFavorite, fetchOfferData} from '../../store/api-actions';
 
 function RoomScreen(props) {
   const { id } = props.match.params;
@@ -131,7 +131,7 @@ function RoomScreen(props) {
                   </p>
                 </div>
               </div>
-              {reviews && <ReviewsList reviews={reviews}/>}
+              {reviews && <ReviewsList reviews={reviews} roomId={id}/>}
             </div>
           </div>
           {city && (
@@ -185,7 +185,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setFavorite(id, status, authorizationStatus) {
     if (authorizationStatus === AuthorizationStatus.AUTH) {
-      dispatch(fetchFavorite(id, status));
+      dispatch(sendFavorite(id, status));
     } else {
       dispatch(ActionCreator.redirectToRoute(AppRoute.SIGN_IN));
     }

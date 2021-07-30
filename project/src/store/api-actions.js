@@ -27,6 +27,13 @@ export const fetchComments = (id, api) => (
     .catch(() => [])
 );
 
+export const sendComment = (id, comment) => (dispatch, _getState, api) => {
+  const url = APIRoute.COMMENT.replace(/:hotelId/, id);
+  return api.post(url, comment)
+    .then(({data}) => data.map(adaptCommentToClient))
+    .then((data) => dispatch(ActionCreator.loadComments(data)));
+};
+
 export const fetchNeighbours = (id, api) => (
   api.get(APIRoute.NEARBY.replace(/:hotelId/, id))
     .then(({data}) => data.map(adaptToClient))
@@ -59,7 +66,7 @@ export const logout = () => (dispatch, _getState, api) => (
     .then(() => dispatch(ActionCreator.logout()))
 );
 
-export const fetchFavorite = (id, status) => (dispatch, _getState, api) => {
+export const sendFavorite = (id, status) => (dispatch, _getState, api) => {
   let url = APIRoute.FAVORITE.replace(/:hotelId/, id);
   url = url.replace(/:status/, status);
   return api.post(url)

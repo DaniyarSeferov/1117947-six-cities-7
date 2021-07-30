@@ -42,6 +42,12 @@ const reducer = (state = initialState, action) => {
         isDataLoaded: true,
       };
     }
+    case ActionType.LOAD_COMMENTS: {
+      return {
+        ...state,
+        comments: action.payload,
+      };
+    }
     case ActionType.START_LOADING: {
       return {
         ...state,

@@ -26,6 +26,8 @@ export const MAXIMUM_RATING = 5;
 export const MAXIMUM_OFFER_IMAGES = 6;
 export const MAXIMUM_NEIGHBOURS = 3;
 export const MAXIMUM_REVIEWS = 10;
+export const COMMENT_MINIMUM_LENGTH = 10;
+export const COMMENT_MAXIMUM_LENGTH = 300;
 
 export const RatingType = {
   PERFECT: 'perfect',
@@ -34,8 +36,6 @@ export const RatingType = {
   BADLY: 'badly',
   TERRIBLY: 'terribly',
 };
-
-export const NEIGHBOURS_COUNT = 3;
 
 export const OfferListType = {
   CITIES: 'cities',

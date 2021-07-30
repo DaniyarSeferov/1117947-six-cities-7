@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import PropTypes from 'prop-types';
 import leaflet from 'leaflet';
 import {locationProp} from '../room-screen/room-screen.prop';
-import useMap from '../../hooks/use-map/useMap';
+import useMap from '../../hooks/use-map/use-map';
 
 function Map(props) {
   const {city, points} = props;

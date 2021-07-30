@@ -6,7 +6,6 @@ import {createAPI} from './services/api';
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import App from './components/app/app';
-import reviews from './mocks/reviews';
 import {AppRoute, AuthorizationStatus} from './const';
 import {reducer} from './store/reducer';
 import {checkAuth, fetchOffers} from './store/api-actions';
@@ -32,9 +31,7 @@ store.dispatch(fetchOffers());
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App
-        reviews={reviews}
-      />
+      <App/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

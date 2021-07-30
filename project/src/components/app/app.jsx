@@ -7,7 +7,7 @@ import FavoritesScreen from '../favorites-screen/favorites-screen';
 import RoomScreen from '../room-screen/room-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {AppRoute} from '../../const';
-import {cityNameProp, offerProp, reviewProp} from '../room-screen/room-screen.prop';
+import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {connect} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
@@ -64,7 +64,6 @@ function App(props) {
 App.propTypes = {
   city: cityNameProp.isRequired,
   offers: PropTypes.arrayOf(offerProp).isRequired,
-  reviews: PropTypes.arrayOf(reviewProp).isRequired,
   isDataLoaded: PropTypes.bool.isRequired,
   authorizationStatus: PropTypes.string.isRequired,
 };

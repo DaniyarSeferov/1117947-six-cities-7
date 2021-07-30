@@ -32,7 +32,7 @@ export const sendComment = (id, comment) => (dispatch, _getState, api) => {
   return api.post(url, comment)
     .then(({data}) => data.map(adaptCommentToClient))
     .then((data) => dispatch(ActionCreator.loadComments(data)))
-    .catch(() => dispatch(ActionCreator.finishSending()));
+    .catch(() => dispatch(ActionCreator.finishSending('There was an error of some sort.')));
 };
 
 export const fetchNeighbours = (id, api) => (

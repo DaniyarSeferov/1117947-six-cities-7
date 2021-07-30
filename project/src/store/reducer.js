@@ -9,6 +9,7 @@ const initialState = {
   neighbours: [],
   isDataLoaded: false,
   isDataSent: true,
+  sendError: '',
   authorizationStatus: AuthorizationStatus.UNKNOWN,
   user: {},
 };
@@ -60,12 +61,14 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isDataSent: false,
+        sendError: '',
       };
     }
     case ActionType.FINISH_SENDING: {
       return {
         ...state,
         isDataSent: true,
+        sendError: action.payload,
       };
     }
     case ActionType.REQUIRED_AUTHORIZATION:

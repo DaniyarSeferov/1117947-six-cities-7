@@ -55,7 +55,7 @@ function setError(control, errors) {
   const isRadio = Object.prototype.isPrototypeOf.call(RadioNodeList.prototype, control);
   clearError(control);
   let error = errors.slice(0, 1);
-  error = `<p class="validation-error">${error}</p>`;
+  error = `<p class="validation-error" style="font-size: 14px;color: red;">${error}</p>`;
 
   if (!isRadio) {
     control.classList.add('invalid');

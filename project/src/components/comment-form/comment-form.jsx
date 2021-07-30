@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   COMMENT_MAXIMUM_LENGTH,
   COMMENT_MINIMUM_LENGTH,
@@ -13,7 +13,7 @@ import {ActionCreator} from '../../store/action';
 
 function CommentForm(props) {
   const [isFormValid, setFormValid] = useState(false);
-  const {onSubmit, roomId, isDataSent} = props;
+  const {onSubmit, roomId, isDataSent, sendError} = props;
   const formRef = React.useRef(null);
   const validators = getValidators();
   const [getValue, clear, isValid] = useForm(formRef, {
@@ -26,6 +26,13 @@ function CommentForm(props) {
       error: `Review should be between ${COMMENT_MINIMUM_LENGTH} and ${COMMENT_MAXIMUM_LENGTH} characters long.`,
     }],
   });
+
+  useEffect(() => {
+    if (!sendError && isDataSent) {
+      clear();
+      setFormValid(false);
+    }
+  }, [sendError, isDataSent]);
 
   const handleChange = (evt) => {
     setFormValid(isValid(false));
@@ -42,9 +49,6 @@ function CommentForm(props) {
       };
 
       onSubmit(roomId, formData);
-
-      setFormValid(false);
-      clear();
     }
   };
 
@@ -56,6 +60,9 @@ function CommentForm(props) {
       action="#"
       method="post"
     >
+      {sendError && (
+        <p className="request-error" style={{fontSize: '14px', color: 'red'}}>{sendError}</p>
+      )}
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="form-control">
         <div className="reviews__rating-form form__rating">
@@ -113,11 +120,13 @@ function CommentForm(props) {
 CommentForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
+  sendError: PropTypes.string,
   isDataSent: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isDataSent: state.isDataSent,
+  sendError: state.sendError,
 });
 
 const mapDispatchToProps = (dispatch) => ({

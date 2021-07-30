@@ -40,8 +40,9 @@ export const ActionCreator = {
   startSending: () => ({
     type: ActionType.START_SENDING,
   }),
-  finishSending: () => ({
+  finishSending: (error) => ({
     type: ActionType.FINISH_SENDING,
+    payload: error,
   }),
   requireAuthorization: (status) => ({
     type: ActionType.REQUIRED_AUTHORIZATION,

@@ -1,6 +1,12 @@
 export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
+  LOAD_SINGLE_OFFER: 'data/loadSingleOffer',
+  LOAD_OFFER: 'data/loadOffer',
+  LOAD_COMMENTS: 'data/loadComments',
+  START_LOADING: 'data/startLoading',
+  START_SENDING: 'data/startSending',
+  FINISH_SENDING: 'data/finishSending',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   GET_USER_DATA: 'user/data',
   LOGOUT: 'user/logout',
@@ -15,6 +21,28 @@ export const ActionCreator = {
   loadOffers: (offers) => ({
     type: ActionType.LOAD_OFFERS,
     payload: offers,
+  }),
+  loadSingleOffer: (offer) => ({
+    type: ActionType.LOAD_SINGLE_OFFER,
+    payload: offer,
+  }),
+  loadOffer: (offerData) => ({
+    type: ActionType.LOAD_OFFER,
+    payload: offerData,
+  }),
+  loadComments: (comments) => ({
+    type: ActionType.LOAD_COMMENTS,
+    payload: comments,
+  }),
+  startLoading: () => ({
+    type: ActionType.START_LOADING,
+  }),
+  startSending: () => ({
+    type: ActionType.START_SENDING,
+  }),
+  finishSending: (error) => ({
+    type: ActionType.FINISH_SENDING,
+    payload: error,
   }),
   requireAuthorization: (status) => ({
     type: ActionType.REQUIRED_AUTHORIZATION,
@@ -77,4 +105,26 @@ export const adaptUserDataToClient = (user) => {
   delete adaptedUserData.is_pro;
 
   return adaptedUserData;
+};
+
+export const adaptCommentToClient = (comment) => {
+  const adaptedCommentData = Object.assign(
+    {},
+    comment,
+    {
+      user: Object.assign(
+        {},
+        comment.user,
+        {
+          avatarUrl: comment.user.avatar_url,
+          isPro: comment.user.is_pro,
+        },
+      ),
+    },
+  );
+
+  delete adaptedCommentData.user.avatar_url;
+  delete adaptedCommentData.user.is_pro;
+
+  return adaptedCommentData;
 };

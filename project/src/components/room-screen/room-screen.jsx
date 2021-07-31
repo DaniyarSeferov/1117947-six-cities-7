@@ -1,22 +1,36 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import Header from '../header/header';
 import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
-import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent} from '../../utils';
+import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent, isEmptyObject} from '../../utils';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
-import {OfferListType} from '../../const';
+import {AppRoute, AuthorizationStatus, MAXIMUM_NEIGHBOURS, MAXIMUM_OFFER_IMAGES, OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
+import {connect} from 'react-redux';
+import {ActionCreator} from '../../store/action';
+import {sendFavorite, fetchOfferData} from '../../store/api-actions';
 
 function RoomScreen(props) {
-  const [activeOffer, setActiveOffer] = useState(null);
-  const {offer, reviews, neighbours} = props;
-  const {images, isPremium, title, isFavorite, bedrooms, maxAdults, price, goods, rating, host, description, city} = offer;
+  const { id } = props.match.params;
+  const {offer = {}, getOfferData, reviews, setFavorite, authorizationStatus} = props;
+  let {neighbours = []} = props;
+
+  useEffect(() => {
+    if (isEmptyObject(offer) || (offer.id !== Number(id))) {
+      getOfferData(id);
+    }
+  }, [id]);
+
+  const {images = [], isPremium, title, isFavorite, bedrooms, maxAdults, price, goods = [], rating, host, description, city} = offer;
   let {type} = offer;
   const ratingPercent = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
-  const {avatarUrl, isPro, name} = host;
-  const points = getMapPoints(neighbours, activeOffer);
+  const {avatarUrl = '', isPro = false, name = ''} = host || {};
+  neighbours = neighbours.slice(0, MAXIMUM_NEIGHBOURS);
+  const neighboursCopy = neighbours.slice();
+  neighboursCopy.push(offer);
+  const points = !isEmptyObject(offer) ? getMapPoints(neighboursCopy, offer) : [];
 
   return (
     <div className="page">
@@ -26,7 +40,7 @@ function RoomScreen(props) {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {images.map((image, index) => {
+              {images.slice(0, MAXIMUM_OFFER_IMAGES).map((image, index) => {
                 const keyValue = `${index}-${image}`;
                 return (
                   <div key={keyValue} className="property__image-wrapper">
@@ -47,7 +61,14 @@ function RoomScreen(props) {
                 <h1 className="property__name">
                   {title}
                 </h1>
-                <button className={`property__bookmark-button button ${isFavorite && 'property__bookmark-button--active'}`} type="button">
+                <button
+                  className={`property__bookmark-button button ${isFavorite && 'property__bookmark-button--active'}`}
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setFavorite(id, Number(!isFavorite), authorizationStatus);
+                  }}
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -110,17 +131,19 @@ function RoomScreen(props) {
                   </p>
                 </div>
               </div>
-              <ReviewsList reviews={reviews}/>
+              {reviews && <ReviewsList reviews={reviews} roomId={id}/>}
             </div>
           </div>
-          <Map city={city} points={points} render={(mapRef) => (
-            <section
-              className="property__map map"
-              ref={mapRef}
-            >
-            </section>
+          {city && (
+            <Map city={city} points={points} render={(mapRef) => (
+              <section
+                className="property__map map"
+                ref={mapRef}
+              >
+              </section>
+            )}
+            />
           )}
-          />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -129,7 +152,7 @@ function RoomScreen(props) {
               className="near-places__list"
               offers={neighbours}
               type={OfferListType.NEIGHBOURS}
-              onHover={setActiveOffer}
+              onHover={() => {}}
             />
           </section>
         </div>
@@ -139,9 +162,35 @@ function RoomScreen(props) {
 }
 
 RoomScreen.propTypes = {
-  offer: offerProp.isRequired,
-  reviews: PropTypes.arrayOf(reviewProp).isRequired,
-  neighbours: PropTypes.arrayOf(offerProp).isRequired,
+  offer: offerProp,
+  reviews: PropTypes.arrayOf(reviewProp),
+  neighbours: PropTypes.arrayOf(offerProp),
+  getOfferData: PropTypes.func.isRequired,
+  setFavorite: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
-export default RoomScreen;
+const mapStateToProps = (state) => ({
+  offer: state.offer,
+  reviews: state.comments,
+  neighbours: state.neighbours,
+  authorizationStatus: state.authorizationStatus,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getOfferData(id) {
+    dispatch(ActionCreator.startLoading());
+    dispatch(fetchOfferData(id));
+  },
+  setFavorite(id, status, authorizationStatus) {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(sendFavorite(id, status));
+    } else {
+      dispatch(ActionCreator.redirectToRoute(AppRoute.SIGN_IN));
+    }
+  },
+});
+
+export {RoomScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(RoomScreen);

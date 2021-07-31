@@ -1,4 +1,5 @@
 import {AccommodationType, AuthorizationStatus, MAXIMUM_RATING} from './const';
+import dayjs from 'dayjs';
 
 export const getRatingPercent = (rating) => Math.round(rating) * 100 / MAXIMUM_RATING;
 
@@ -31,3 +32,8 @@ export const getMapPoints = (offers, activeOffer) => offers
 
 export const isCheckedAuth = (authorizationStatus) =>
   authorizationStatus === AuthorizationStatus.UNKNOWN;
+
+export const isEmptyObject = (currentObject) =>
+  Object.keys(currentObject).length === 0;
+
+export const sortReviews = (reviewA, reviewB) => dayjs(reviewB.date).diff(dayjs(reviewA.date));

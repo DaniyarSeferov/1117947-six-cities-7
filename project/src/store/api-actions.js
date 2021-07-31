@@ -1,10 +1,43 @@
-import {ActionCreator, adaptToClient, adaptUserDataToClient} from './action';
+import {ActionCreator, adaptCommentToClient, adaptToClient, adaptUserDataToClient} from './action';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
 
 export const fetchOffers = () => (dispatch, _getState, api) => (
   api.get(APIRoute.OFFERS)
     .then(({data}) => data.map(adaptToClient))
     .then((data) => dispatch(ActionCreator.loadOffers(data)))
+);
+
+export const fetchOfferData = (id) => (dispatch, _getState, api) => (
+  Promise.all([
+    fetchOffer(id, api),
+    fetchComments(id, api),
+    fetchNeighbours(id, api),
+  ])
+    .then(([offer, comments, neighbours]) => dispatch(ActionCreator.loadOffer({offer, comments, neighbours})))
+    .catch(() => {})
+);
+
+export const fetchOffer = (id, api) => (
+  api.get(`${APIRoute.OFFERS}/${id}`)
+    .then(({data}) => adaptToClient(data))
+);
+
+export const fetchComments = (id, api) => (
+  api.get(`${APIRoute.COMMENTS}/${id}`)
+    .then(({data}) => data.map(adaptCommentToClient))
+);
+
+export const sendComment = (id, comment) => (dispatch, _getState, api) => {
+  const url = APIRoute.COMMENT.replace(/:hotelId/, id);
+  return api.post(url, comment)
+    .then(({data}) => data.map(adaptCommentToClient))
+    .then((data) => dispatch(ActionCreator.loadComments(data)))
+    .catch(() => dispatch(ActionCreator.finishSending('There was an error of some sort.')));
+};
+
+export const fetchNeighbours = (id, api) => (
+  api.get(APIRoute.NEARBY.replace(/:hotelId/, id))
+    .then(({data}) => data.map(adaptToClient))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
@@ -32,3 +65,11 @@ export const logout = () => (dispatch, _getState, api) => (
     .then(() => localStorage.removeItem('token'))
     .then(() => dispatch(ActionCreator.logout()))
 );
+
+export const sendFavorite = (id, status) => (dispatch, _getState, api) => {
+  let url = APIRoute.FAVORITE.replace(/:hotelId/, id);
+  url = url.replace(/:status/, status);
+  return api.post(url)
+    .then(({data}) => adaptToClient(data))
+    .then((data) => dispatch(ActionCreator.loadSingleOffer(data)));
+};

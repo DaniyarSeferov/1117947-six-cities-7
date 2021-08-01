@@ -40,6 +40,12 @@ export const fetchNeighbours = (id, api) => (
     .then(({data}) => data.map(adaptToClient))
 );
 
+export const fetchFavorite = () => (dispatch, _getState, api) => (
+  api.get(APIRoute.FAVORITES)
+    .then(({data}) => data.map(adaptToClient))
+    .then((data) => dispatch(ActionCreator.loadOffers(data)))
+);
+
 export const checkAuth = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGIN)
     .then(({data}) => adaptUserDataToClient(data))

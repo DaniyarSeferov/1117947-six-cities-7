@@ -55,6 +55,7 @@ export const APIRoute = {
   COMMENT: '/comments/:hotelId',
   NEARBY: '/hotels/:hotelId/nearby',
   FAVORITE: '/favorite/:hotelId/:status',
+  FAVORITES: '/favorite',
   LOGIN: '/login',
   LOGOUT: '/logout',
 };

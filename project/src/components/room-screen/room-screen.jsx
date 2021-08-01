@@ -17,9 +17,7 @@ function RoomScreen(props) {
   let {neighbours = []} = props;
 
   useEffect(() => {
-    if (isEmptyObject(offer) || (offer.id !== Number(id))) {
-      getOfferData(id);
-    }
+    getOfferData(id);
   }, [id]);
 
   const {images = [], isPremium, title, isFavorite, bedrooms, maxAdults, price, goods = [], rating, host, description, city} = offer;

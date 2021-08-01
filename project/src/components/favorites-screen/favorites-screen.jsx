@@ -1,13 +1,27 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Header from '../header/header';
 import PropTypes from 'prop-types';
 import {offerProp} from '../room-screen/room-screen.prop';
 import FavoritesList from '../favorites-list/favorites-list';
 import {AppRoute} from '../../const';
 import {Link} from 'react-router-dom';
+import {ActionCreator} from '../../store/action';
+import {fetchFavorite} from '../../store/api-actions';
+import {connect} from 'react-redux';
+import SpinnerScreen from '../spinner-screen/spinner-screen';
 
 function FavoritesScreen(props) {
-  const {offers} = props;
+  const {offers, isDataLoaded, requestOffers} = props;
+
+  useEffect(() => {
+    requestOffers();
+  }, []);
+
+  if (!isDataLoaded) {
+    return (
+      <SpinnerScreen />
+    );
+  }
 
   return (
     <div className="page">
@@ -37,6 +51,21 @@ function FavoritesScreen(props) {
 
 FavoritesScreen.propTypes = {
   offers: PropTypes.arrayOf(offerProp).isRequired,
+  isDataLoaded: PropTypes.bool.isRequired,
+  requestOffers: PropTypes.func.isRequired,
 };
 
-export default FavoritesScreen;
+const mapStateToProps = (state) => ({
+  offers: state.offers,
+  isDataLoaded: state.isDataLoaded,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  requestOffers() {
+    dispatch(ActionCreator.startLoading());
+    dispatch(fetchFavorite());
+  },
+});
+
+export {FavoritesScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(FavoritesScreen);

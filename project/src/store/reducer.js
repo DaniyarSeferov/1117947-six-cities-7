@@ -80,6 +80,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload,
+        isDataLoaded: true,
       };
     case ActionType.LOGOUT:
       return {

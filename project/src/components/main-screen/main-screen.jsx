@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Header from '../header/header';
 import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
@@ -10,15 +10,27 @@ import {ActionCreator} from '../../store/action';
 import CitiesList from '../cities-list/cities-list';
 import SortingOptions from '../sorting-options/sorting-options';
 import {getMapPoints, sortPriceHigh, sortPriceLow, sortTopRated} from '../../utils';
+import {fetchOffers} from '../../store/api-actions';
+import SpinnerScreen from '../spinner-screen/spinner-screen';
 
 function MainScreen(props) {
   const [sortKey, setSortKey] = useState('POPULAR');
   const [activeOffer, setActiveOffer] = useState(null);
-  const {city, onChangeCity} = props;
+  const {city, onChangeCity, requestOffers, isDataLoaded} = props;
   let {offers} = props;
   offers = getOffers(offers, city, sortKey);
   const hasOffers = offers.length ? true : null;
   const points = getMapPoints(offers, activeOffer);
+
+  useEffect(() => {
+    requestOffers();
+  }, []);
+
+  if (!isDataLoaded) {
+    return (
+      <SpinnerScreen />
+    );
+  }
 
   return (
     <div className="page page--gray page--main">
@@ -75,16 +87,23 @@ MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerProp).isRequired,
   onChangeCity: PropTypes.func.isRequired,
   city: cityNameProp.isRequired,
+  requestOffers: PropTypes.func.isRequired,
+  isDataLoaded: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   city: state.city,
   offers: state.offers,
+  isDataLoaded: state.isDataLoaded,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeCity(city) {
     dispatch(ActionCreator.changeCity(city));
+  },
+  requestOffers() {
+    dispatch(ActionCreator.startLoading());
+    dispatch(fetchOffers());
   },
 });
 

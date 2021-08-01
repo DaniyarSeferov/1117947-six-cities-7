@@ -7,7 +7,6 @@ import FavoritesScreen from '../favorites-screen/favorites-screen';
 import RoomScreen from '../room-screen/room-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {AppRoute} from '../../const';
-import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {connect} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
@@ -16,9 +15,9 @@ import browserHistory from '../../browser-history';
 import AnonymousRoute from '../anonymous-route/anonymous-route';
 
 function App(props) {
-  const {city, offers, isDataLoaded, authorizationStatus} = props;
+  const {authorizationStatus} = props;
 
-  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+  if (isCheckedAuth(authorizationStatus)) {
     return (
       <SpinnerScreen />
     );
@@ -28,10 +27,7 @@ function App(props) {
     <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.ROOT}>
-          <MainScreen
-            city={city}
-            offers={offers}
-          />
+          <MainScreen />
         </Route>
         <AnonymousRoute
           exact
@@ -44,9 +40,7 @@ function App(props) {
           exact
           path={AppRoute.FAVORITES}
           render={() => (
-            <FavoritesScreen
-              offers={offers.filter((offer) => offer.isFavorite)}
-            />
+            <FavoritesScreen />
           )}
         />
         <Route exact
@@ -62,17 +56,11 @@ function App(props) {
 }
 
 App.propTypes = {
-  city: cityNameProp.isRequired,
-  offers: PropTypes.arrayOf(offerProp).isRequired,
-  isDataLoaded: PropTypes.bool.isRequired,
   authorizationStatus: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  isDataLoaded: state.isDataLoaded,
-  offers: state.offers,
   authorizationStatus: state.authorizationStatus,
-  city: state.city,
 });
 
 export {App};

@@ -169,11 +169,11 @@ RoomScreen.propTypes = {
   authorizationStatus: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  offer: state.offer,
-  reviews: state.comments,
-  neighbours: state.neighbours,
-  authorizationStatus: state.authorizationStatus,
+const mapStateToProps = ({DATA, USER}) => ({
+  offer: DATA.offer,
+  reviews: DATA.comments,
+  neighbours: DATA.neighbours,
+  authorizationStatus: USER.authorizationStatus,
 });
 
 const mapDispatchToProps = (dispatch) => ({

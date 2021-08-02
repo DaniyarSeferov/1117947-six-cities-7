@@ -3,6 +3,7 @@ import {AuthorizationStatus} from '../../const';
 
 const initialState = {
   user: {},
+  authorizationStatus: AuthorizationStatus.UNKNOWN,
 };
 
 const user = (state = initialState, action) => {
@@ -17,6 +18,11 @@ const user = (state = initialState, action) => {
         ...state,
         authorizationStatus: AuthorizationStatus.NO_AUTH,
         user: {},
+      };
+    case ActionType.REQUIRED_AUTHORIZATION:
+      return {
+        ...state,
+        authorizationStatus: action.payload,
       };
     default:
       return state;

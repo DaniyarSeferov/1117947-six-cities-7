@@ -87,7 +87,7 @@ export const sendFavorite = (id, status) => (dispatch, _getState, api) => {
     .then(({data}) => adaptToClient(data))
     .then((data) => {
       const state = _getState();
-      let {offers, offer, neighbours} = state;
+      let {offers, offer, neighbours} = state.DATA;
       const offerIndex = offers.findIndex((offerItem) => offerItem.id === data.id);
       const neighbourIndex = neighbours.findIndex((neighbour) => neighbour.id === data.id);
 

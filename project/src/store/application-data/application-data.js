@@ -34,6 +34,13 @@ const applicationData = (state = initialState, action) => {
         ...state,
         isDataLoaded: false,
       };
+    case ActionType.SET_FAVORITE:
+      return {
+        ...state,
+        offer: action.payload.offer,
+        offers: action.payload.offers,
+        neighbours: action.payload.neighbours,
+      };
     default:
       return state;
   }

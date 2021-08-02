@@ -1,11 +1,10 @@
 import {ActionType} from '../action';
-import {AuthorizationStatus, Cities} from '../../const';
+import {Cities} from '../../const';
 
 const initialState = {
   city: Cities.PARIS,
   isDataSent: true,
   sendError: '',
-  authorizationStatus: AuthorizationStatus.UNKNOWN,
 };
 
 const applicationProcess = (state = initialState, action) => {
@@ -14,13 +13,6 @@ const applicationProcess = (state = initialState, action) => {
       return {
         ...state,
         city: action.city,
-      };
-    case ActionType.SET_FAVORITE:
-      return {
-        ...state,
-        offer: action.payload.offer,
-        offers: action.payload.offers,
-        neighbours: action.payload.neighbours,
       };
     case ActionType.START_SENDING:
       return {
@@ -33,11 +25,6 @@ const applicationProcess = (state = initialState, action) => {
         ...state,
         isDataSent: true,
         sendError: action.payload,
-      };
-    case ActionType.REQUIRED_AUTHORIZATION:
-      return {
-        ...state,
-        authorizationStatus: action.payload,
       };
     default:
       return state;

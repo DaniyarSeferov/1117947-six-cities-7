@@ -124,9 +124,9 @@ CommentForm.propTypes = {
   isDataSent: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  isDataSent: state.isDataSent,
-  sendError: state.sendError,
+const mapStateToProps = ({APPLICATION}) => ({
+  isDataSent: APPLICATION.isDataSent,
+  sendError: APPLICATION.sendError,
 });
 
 const mapDispatchToProps = (dispatch) => ({

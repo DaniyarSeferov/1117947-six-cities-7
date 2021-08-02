@@ -1,4 +1,4 @@
-import {AccommodationType, AuthorizationStatus, MAXIMUM_RATING} from './const';
+import {AccommodationType, AuthorizationStatus, MAXIMUM_RATING, ServerStatus} from './const';
 import dayjs from 'dayjs';
 
 export const getRatingPercent = (rating) => Math.round(rating) * 100 / MAXIMUM_RATING;
@@ -37,3 +37,6 @@ export const isEmptyObject = (currentObject) =>
   Object.keys(currentObject).length === 0;
 
 export const sortReviews = (reviewA, reviewB) => dayjs(reviewB.date).diff(dayjs(reviewA.date));
+
+export const isServerAvailable = (serverStatus) =>
+  serverStatus === ServerStatus.AVAILABLE;

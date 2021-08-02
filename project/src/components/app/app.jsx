@@ -8,14 +8,23 @@ import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {AppRoute} from '../../const';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {useSelector} from 'react-redux';
-import {isCheckedAuth} from '../../utils';
+import {isCheckedAuth, isServerAvailable} from '../../utils';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from '../../browser-history';
 import AnonymousRoute from '../anonymous-route/anonymous-route';
 import {getAuthorizationStatus} from '../../store/user/selectors';
+import {getStateServerStatus} from '../../store/application-data/selectors';
+import ServerUnavailableScreen from '../server-unavailable-screen/server-unavailable-screen';
 
 function App() {
   const authorizationStatus = useSelector(getAuthorizationStatus);
+  const serverStatus = useSelector(getStateServerStatus);
+
+  if (!isServerAvailable(serverStatus)) {
+    return (
+      <ServerUnavailableScreen />
+    );
+  }
 
   if (isCheckedAuth(authorizationStatus)) {
     return (

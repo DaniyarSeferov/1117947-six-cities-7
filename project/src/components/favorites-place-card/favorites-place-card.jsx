@@ -2,10 +2,15 @@ import {offerProp} from '../room-screen/room-screen.prop';
 import React from 'react';
 import {getAccommodationTypeTitle, getRatingPercent} from '../../utils';
 import {Link} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus} from '../../const';
+import {sendFavorite} from '../../store/api-actions';
+import {ActionCreator} from '../../store/action';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 function FavoritesPlaceCard(props) {
-  const {offer} = props;
-  const {isPremium, previewImage, price, title} = offer;
+  const {offer, authorizationStatus, setFavorite} = props;
+  const {isPremium, previewImage, price, title, isFavorite} = offer;
   let {rating, type} = offer;
   rating = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
@@ -27,7 +32,14 @@ function FavoritesPlaceCard(props) {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
+          <button
+            className="place-card__bookmark-button place-card__bookmark-button--active button"
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              setFavorite(offer.id, Number(!isFavorite), authorizationStatus);
+            }}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
@@ -51,6 +63,23 @@ function FavoritesPlaceCard(props) {
 
 FavoritesPlaceCard.propTypes = {
   offer: offerProp.isRequired,
+  setFavorite: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
-export default FavoritesPlaceCard;
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setFavorite(id, status, authorizationStatus) {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(sendFavorite(id, status));
+    } else {
+      dispatch(ActionCreator.redirectToRoute(AppRoute.SIGN_IN));
+    }
+  },
+});
+
+export {FavoritesPlaceCard};
+export default connect(mapStateToProps, mapDispatchToProps)(FavoritesPlaceCard);

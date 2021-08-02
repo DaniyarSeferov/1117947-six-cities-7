@@ -11,7 +11,9 @@ import {connect} from 'react-redux';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 
 function FavoritesScreen(props) {
-  const {offers, isDataLoaded, requestOffers} = props;
+  const {isDataLoaded, requestOffers} = props;
+  let {offers} = props;
+  offers = offers.filter((offer) => offer.isFavorite);
 
   useEffect(() => {
     requestOffers();

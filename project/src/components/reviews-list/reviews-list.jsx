@@ -10,7 +10,7 @@ import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function ReviewsList(props) {
   const {reviews, authorizationStatus, roomId} = props;
-  const sortedReviews = reviews.sort(sortReviews).slice(0, MAXIMUM_REVIEWS);
+  const sortedReviews = reviews.slice().sort(sortReviews).slice(0, MAXIMUM_REVIEWS);
 
   return (
     <section className="property__reviews reviews">

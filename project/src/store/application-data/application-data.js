@@ -1,4 +1,5 @@
-import {ActionType} from '../action';
+import {createReducer} from '@reduxjs/toolkit';
+import {loadComments, loadOffer, loadOffers, setFavorite, startLoading} from '../action';
 
 const initialState = {
   offers: [],
@@ -8,42 +9,29 @@ const initialState = {
   isDataLoaded: false,
 };
 
-const applicationData = (state = initialState, action) => {
-  switch (action.type) {
-    case ActionType.LOAD_OFFERS:
-      return {
-        ...state,
-        offers: action.payload,
-        isDataLoaded: true,
-      };
-    case ActionType.LOAD_OFFER:
-      return {
-        ...state,
-        offer: action.payload.offer,
-        comments: action.payload.comments,
-        neighbours: action.payload.neighbours,
-        isDataLoaded: true,
-      };
-    case ActionType.LOAD_COMMENTS:
-      return {
-        ...state,
-        comments: action.payload,
-      };
-    case ActionType.START_LOADING:
-      return {
-        ...state,
-        isDataLoaded: false,
-      };
-    case ActionType.SET_FAVORITE:
-      return {
-        ...state,
-        offer: action.payload.offer,
-        offers: action.payload.offers,
-        neighbours: action.payload.neighbours,
-      };
-    default:
-      return state;
-  }
-};
+const applicationData = createReducer(initialState, (builder) => {
+  builder
+    .addCase(loadOffers, (state, action) => {
+      state.offers = action.payload;
+      state.isDataLoaded = true;
+    })
+    .addCase(loadOffer, (state, action) => {
+      state.offer = action.payload.offer;
+      state.comments = action.payload.comments;
+      state.neighbours = action.payload.neighbours;
+      state.isDataLoaded = true;
+    })
+    .addCase(loadComments, (state, action) => {
+      state.comments = action.payload;
+    })
+    .addCase(startLoading, (state, action) => {
+      state.isDataLoaded = false;
+    })
+    .addCase(setFavorite, (state, action) => {
+      state.offer = action.payload.offer;
+      state.offers = action.payload.offers;
+      state.neighbours = action.payload.neighbours;
+    });
+});
 
 export {applicationData};

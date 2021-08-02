@@ -29,10 +29,12 @@ const reducer = (state = initialState, action) => {
         isDataLoaded: true,
       };
     }
-    case ActionType.LOAD_SINGLE_OFFER: {
+    case ActionType.SET_FAVORITE: {
       return {
         ...state,
-        offer: action.payload,
+        offer: action.payload.offer,
+        offers: action.payload.offers,
+        neighbours: action.payload.neighbours,
       };
     }
     case ActionType.LOAD_OFFER: {

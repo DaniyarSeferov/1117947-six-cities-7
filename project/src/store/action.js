@@ -1,7 +1,7 @@
 export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
-  LOAD_SINGLE_OFFER: 'data/loadSingleOffer',
+  SET_FAVORITE: 'data/setFavorite',
   LOAD_OFFER: 'data/loadOffer',
   LOAD_COMMENTS: 'data/loadComments',
   START_LOADING: 'data/startLoading',
@@ -22,9 +22,9 @@ export const ActionCreator = {
     type: ActionType.LOAD_OFFERS,
     payload: offers,
   }),
-  loadSingleOffer: (offer) => ({
-    type: ActionType.LOAD_SINGLE_OFFER,
-    payload: offer,
+  setFavorite: (data) => ({
+    type: ActionType.SET_FAVORITE,
+    payload: data,
   }),
   loadOffer: (offerData) => ({
     type: ActionType.LOAD_OFFER,

@@ -77,5 +77,24 @@ export const sendFavorite = (id, status) => (dispatch, _getState, api) => {
   url = url.replace(/:status/, status);
   return api.post(url)
     .then(({data}) => adaptToClient(data))
-    .then((data) => dispatch(ActionCreator.loadSingleOffer(data)));
+    .then((data) => {
+      const state = _getState();
+      let {offers, offer, neighbours} = state;
+      const offerIndex = offers.findIndex((offerItem) => offerItem.id === data.id);
+      const neighbourIndex = neighbours.findIndex((neighbour) => neighbour.id === data.id);
+
+      if (offer.id === data.id) {
+        offer = data;
+      }
+      if (offerIndex !== -1) {
+        offers = offers.slice();
+        offers[offerIndex] = data;
+      }
+      if (neighbourIndex !== -1) {
+        neighbours = neighbours.slice();
+        neighbours[neighbourIndex] = data;
+      }
+
+      return dispatch(ActionCreator.setFavorite({offer, offers, neighbours}));
+    });
 };

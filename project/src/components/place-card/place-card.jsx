@@ -7,6 +7,7 @@ import {sendFavorite} from '../../store/api-actions';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import {connect} from 'react-redux';
 import {redirectToRoute} from '../../store/action';
+import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function PlaceCard(props) {
   const {offer, onHover, className = '', imageClassName = '', setFavorite, authorizationStatus} = props;
@@ -71,8 +72,8 @@ PlaceCard.propTypes = {
   authorizationStatus: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({USER}) => ({
-  authorizationStatus: USER.authorizationStatus,
+const mapStateToProps = (state) => ({
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

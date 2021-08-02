@@ -10,6 +10,8 @@ import OfferList from '../offer-list/offer-list';
 import {connect} from 'react-redux';
 import {sendFavorite, fetchOfferData} from '../../store/api-actions';
 import {redirectToRoute, startLoading} from '../../store/action';
+import {getStateNeighbours, getStateOffer, getStateReviews} from '../../store/application-data/selectors';
+import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function RoomScreen(props) {
   const { id } = props.match.params;
@@ -169,11 +171,11 @@ RoomScreen.propTypes = {
   authorizationStatus: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({DATA, USER}) => ({
-  offer: DATA.offer,
-  reviews: DATA.comments,
-  neighbours: DATA.neighbours,
-  authorizationStatus: USER.authorizationStatus,
+const mapStateToProps = (state) => ({
+  offer: getStateOffer(state),
+  reviews: getStateReviews(state),
+  neighbours: getStateNeighbours(state),
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

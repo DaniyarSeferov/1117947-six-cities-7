@@ -9,6 +9,7 @@ import {fetchFavorite} from '../../store/api-actions';
 import {connect} from 'react-redux';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {startLoading} from '../../store/action';
+import {getLoadedDataStatus, getStateOffers} from '../../store/application-data/selectors';
 
 function FavoritesScreen(props) {
   const {isDataLoaded, requestOffers} = props;
@@ -57,9 +58,9 @@ FavoritesScreen.propTypes = {
   requestOffers: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({DATA}) => ({
-  offers: DATA.offers,
-  isDataLoaded: DATA.isDataLoaded,
+const mapStateToProps = (state) => ({
+  offers: getStateOffers(state),
+  isDataLoaded: getLoadedDataStatus(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

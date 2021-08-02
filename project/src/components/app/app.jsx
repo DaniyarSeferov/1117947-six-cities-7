@@ -13,6 +13,7 @@ import {isCheckedAuth} from '../../utils';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from '../../browser-history';
 import AnonymousRoute from '../anonymous-route/anonymous-route';
+import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function App(props) {
   const {authorizationStatus} = props;
@@ -59,8 +60,8 @@ App.propTypes = {
   authorizationStatus: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({USER}) => ({
-  authorizationStatus: USER.authorizationStatus,
+const mapStateToProps = (state) => ({
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 export {App};

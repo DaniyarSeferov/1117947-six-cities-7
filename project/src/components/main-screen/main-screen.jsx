@@ -12,6 +12,8 @@ import {getMapPoints, sortPriceHigh, sortPriceLow, sortTopRated} from '../../uti
 import {fetchOffers} from '../../store/api-actions';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
 import {changeCity, startLoading} from '../../store/action';
+import {getLoadedDataStatus, getStateOffers} from '../../store/application-data/selectors';
+import {getStateCity} from '../../store/application-process/selectors';
 
 function MainScreen(props) {
   const [sortKey, setSortKey] = useState('POPULAR');
@@ -91,10 +93,10 @@ MainScreen.propTypes = {
   isDataLoaded: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = ({APPLICATION, DATA}) => ({
-  city: APPLICATION.city,
-  offers: DATA.offers,
-  isDataLoaded: DATA.isDataLoaded,
+const mapStateToProps = (state) => ({
+  city: getStateCity(state),
+  offers: getStateOffers(state),
+  isDataLoaded: getLoadedDataStatus(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {sendComment} from '../../store/api-actions';
 import PropTypes from 'prop-types';
 import {startSending} from '../../store/action';
+import {getRequestError, getRequestStatus} from '../../store/application-process/selectors';
 
 function CommentForm(props) {
   const [isFormValid, setFormValid] = useState(false);
@@ -124,9 +125,9 @@ CommentForm.propTypes = {
   isDataSent: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = ({APPLICATION}) => ({
-  isDataSent: APPLICATION.isDataSent,
-  sendError: APPLICATION.sendError,
+const mapStateToProps = (state) => ({
+  isDataSent: getRequestStatus(state),
+  sendError: getRequestError(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -6,6 +6,7 @@ import Review from '../review/review';
 import {connect} from 'react-redux';
 import {AuthorizationStatus, MAXIMUM_REVIEWS} from '../../const';
 import {sortReviews} from '../../utils';
+import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function ReviewsList(props) {
   const {reviews, authorizationStatus, roomId} = props;
@@ -33,8 +34,8 @@ ReviewsList.propTypes = {
   roomId: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({USER}) => ({
-  authorizationStatus: USER.authorizationStatus,
+const mapStateToProps = (state) => ({
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 export {ReviewsList};

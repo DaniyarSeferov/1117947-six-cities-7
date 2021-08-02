@@ -59,6 +59,7 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
     .then(({data}) => adaptUserDataToClient(data))
     .then((data) => {
       localStorage.setItem('token', data.token);
+      api.defaults.headers['x-token'] = data.token;
       return data;
     })
     .then((data) => dispatch(ActionCreator.getUserData(data)))

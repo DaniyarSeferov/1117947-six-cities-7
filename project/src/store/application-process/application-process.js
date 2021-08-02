@@ -12,7 +12,7 @@ const applicationProcess = (state = initialState, action) => {
     case ActionType.CITY_CHANGE:
       return {
         ...state,
-        city: action.city,
+        city: action.payload,
       };
     case ActionType.START_SENDING:
       return {

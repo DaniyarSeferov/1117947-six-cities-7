@@ -32,4 +32,4 @@ const mapStateToProps = (state) => ({
 
 
 export {AnonymousRoute};
-export default connect(mapStateToProps)(AnonymousRoute);
+export default connect(mapStateToProps, null)(AnonymousRoute);

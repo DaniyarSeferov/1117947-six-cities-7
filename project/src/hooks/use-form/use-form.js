@@ -86,6 +86,10 @@ function getValidators() {
       value = value.trim();
       return value.length >= minLength && value.length <= maxLength;
     },
+    email: (email) => {
+      const regexes = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regexes.test(String(email).toLowerCase());
+    },
   };
 }
 

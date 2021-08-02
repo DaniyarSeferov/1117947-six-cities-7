@@ -3,10 +3,10 @@ import {offerProp} from '../room-screen/room-screen.prop';
 import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getRatingPercent} from '../../utils';
 import {Link} from 'react-router-dom';
-import {ActionCreator} from '../../store/action';
 import {sendFavorite} from '../../store/api-actions';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import {connect} from 'react-redux';
+import {redirectToRoute} from '../../store/action';
 
 function PlaceCard(props) {
   const {offer, onHover, className = '', imageClassName = '', setFavorite, authorizationStatus} = props;
@@ -80,7 +80,7 @@ const mapDispatchToProps = (dispatch) => ({
     if (authorizationStatus === AuthorizationStatus.AUTH) {
       dispatch(sendFavorite(id, status));
     } else {
-      dispatch(ActionCreator.redirectToRoute(AppRoute.SIGN_IN));
+      dispatch(redirectToRoute(AppRoute.SIGN_IN));
     }
   },
 });

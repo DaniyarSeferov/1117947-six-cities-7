@@ -4,7 +4,7 @@ import {
   adaptUserDataToClient, finishSending, getUserData,
   loadComments,
   loadOffer,
-  loadOffers, redirectToRoute, requireAuthorization, setFavorite
+  loadOffers, redirectToRoute, requireAuthorization, setFavorite, logoutAction
 } from './action';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
 
@@ -50,7 +50,7 @@ export const fetchNeighbours = (id, api) => (
 export const fetchFavorite = () => (dispatch, _getState, api) => (
   api.get(APIRoute.FAVORITES)
     .then(({data}) => data.map(adaptToClient))
-    .then((data) => dispatch(ActionCreator.loadOffers(data)))
+    .then((data) => dispatch(loadOffers(data)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
@@ -77,7 +77,7 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
 export const logout = () => (dispatch, _getState, api) => (
   api.delete(APIRoute.LOGOUT)
     .then(() => localStorage.removeItem('token'))
-    .then(() => dispatch(logout()))
+    .then(() => dispatch(logoutAction()))
 );
 
 export const sendFavorite = (id, status) => (dispatch, _getState, api) => {

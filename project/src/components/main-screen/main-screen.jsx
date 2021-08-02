@@ -6,12 +6,12 @@ import OfferList from '../offer-list/offer-list';
 import Map from '../map/map';
 import {Cities, OfferListType} from '../../const';
 import {connect} from 'react-redux';
-import {ActionCreator} from '../../store/action';
 import CitiesList from '../cities-list/cities-list';
 import SortingOptions from '../sorting-options/sorting-options';
 import {getMapPoints, sortPriceHigh, sortPriceLow, sortTopRated} from '../../utils';
 import {fetchOffers} from '../../store/api-actions';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
+import {changeCity, startLoading} from '../../store/action';
 
 function MainScreen(props) {
   const [sortKey, setSortKey] = useState('POPULAR');
@@ -99,10 +99,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onChangeCity(city) {
-    dispatch(ActionCreator.changeCity(city));
+    dispatch(changeCity(city));
   },
   requestOffers() {
-    dispatch(ActionCreator.startLoading());
+    dispatch(startLoading());
     dispatch(fetchOffers());
   },
 });

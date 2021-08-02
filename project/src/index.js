@@ -9,12 +9,12 @@ import App from './components/app/app';
 import {AppRoute, AuthorizationStatus} from './const';
 import {reducer} from './store/reducer';
 import {checkAuth} from './store/api-actions';
-import {ActionCreator} from './store/action';
 import {redirect} from './store/middlewares/redirect';
+import {redirectToRoute, requireAuthorization} from './store/action';
 
 const api = createAPI({
-  onUnauthorized: () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)),
-  onNotFound: () => store.dispatch(ActionCreator.redirectToRoute(AppRoute.NOT_FOUND)),
+  onUnauthorized: () => store.dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)),
+  onNotFound: () => store.dispatch(redirectToRoute(AppRoute.NOT_FOUND)),
 });
 
 const store = createStore(

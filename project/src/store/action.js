@@ -61,7 +61,7 @@ export const getUserData = (user) => ({
   payload: user,
 });
 
-export const logout = () => ({
+export const logoutAction = () => ({
   type: ActionType.LOGOUT,
 });
 

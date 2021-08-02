@@ -5,10 +5,10 @@ import {offerProp} from '../room-screen/room-screen.prop';
 import FavoritesList from '../favorites-list/favorites-list';
 import {AppRoute} from '../../const';
 import {Link} from 'react-router-dom';
-import {ActionCreator} from '../../store/action';
 import {fetchFavorite} from '../../store/api-actions';
 import {connect} from 'react-redux';
 import SpinnerScreen from '../spinner-screen/spinner-screen';
+import {startLoading} from '../../store/action';
 
 function FavoritesScreen(props) {
   const {isDataLoaded, requestOffers} = props;
@@ -64,7 +64,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   requestOffers() {
-    dispatch(ActionCreator.startLoading());
+    dispatch(startLoading());
     dispatch(fetchFavorite());
   },
 });

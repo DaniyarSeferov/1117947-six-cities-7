@@ -9,7 +9,7 @@ import useForm, {getValidators} from '../../hooks/use-form/use-form';
 import {connect} from 'react-redux';
 import {sendComment} from '../../store/api-actions';
 import PropTypes from 'prop-types';
-import {ActionCreator} from '../../store/action';
+import {startSending} from '../../store/action';
 
 function CommentForm(props) {
   const [isFormValid, setFormValid] = useState(false);
@@ -131,7 +131,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onSubmit(id, comment) {
-    dispatch(ActionCreator.startSending());
+    dispatch(startSending());
     dispatch(sendComment(id, comment));
   },
 });

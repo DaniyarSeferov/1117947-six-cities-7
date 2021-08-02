@@ -8,8 +8,8 @@ import Map from '../map/map';
 import {AppRoute, AuthorizationStatus, MAXIMUM_NEIGHBOURS, MAXIMUM_OFFER_IMAGES, OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
 import {connect} from 'react-redux';
-import {ActionCreator} from '../../store/action';
 import {sendFavorite, fetchOfferData} from '../../store/api-actions';
+import {redirectToRoute, startLoading} from '../../store/action';
 
 function RoomScreen(props) {
   const { id } = props.match.params;
@@ -178,14 +178,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getOfferData(id) {
-    dispatch(ActionCreator.startLoading());
+    dispatch(startLoading());
     dispatch(fetchOfferData(id));
   },
   setFavorite(id, status, authorizationStatus) {
     if (authorizationStatus === AuthorizationStatus.AUTH) {
       dispatch(sendFavorite(id, status));
     } else {
-      dispatch(ActionCreator.redirectToRoute(AppRoute.SIGN_IN));
+      dispatch(redirectToRoute(AppRoute.SIGN_IN));
     }
   },
 });

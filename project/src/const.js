@@ -65,3 +65,8 @@ export const AuthorizationStatus = {
   NO_AUTH: 'NO_AUTH',
   UNKNOWN: 'UNKNOWN',
 };
+
+export const ServerStatus = {
+  AVAILABLE: 'AVAILABLE',
+  UNAVAILABLE: 'UNAVAILABLE',
+};

@@ -13,6 +13,7 @@ export const ActionType = {
   GET_USER_DATA: 'user/data',
   LOGOUT: 'user/logout',
   REDIRECT_TO_ROUTE: 'page/redirectToRoute',
+  SET_SERVER_STATUS: 'server/status',
 };
 
 export const changeCity = createAction(ActionType.CITY_CHANGE, (city) => ({
@@ -55,6 +56,10 @@ export const logoutAction = createAction(ActionType.LOGOUT);
 
 export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({
   payload: url,
+}));
+
+export const setServerStatus = createAction(ActionType.SET_SERVER_STATUS, (data) => ({
+  payload: data,
 }));
 
 export const adaptToClient = (offer) => {

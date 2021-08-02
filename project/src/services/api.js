@@ -6,6 +6,7 @@ const REQUEST_TIMEOUT = 5000;
 const HttpCode = {
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
+  SERVER_UNAVAILABLE: 503,
 };
 
 const token = localStorage.getItem('token') ?? '';
@@ -28,6 +29,8 @@ export const createAPI = (onError) => {
       onError.onUnauthorized();
     } else if (response.status === HttpCode.NOT_FOUND) {
       onError.onNotFound();
+    } else if (response.status === HttpCode.SERVER_UNAVAILABLE) {
+      onError.onServerUnavailable();
     }
 
     throw err;

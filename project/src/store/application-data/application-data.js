@@ -1,5 +1,6 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {loadComments, loadOffer, loadOffers, setFavorite, startLoading} from '../action';
+import {loadComments, loadOffer, loadOffers, setFavorite, setServerStatus, startLoading} from '../action';
+import {ServerStatus} from '../../const';
 
 const initialState = {
   offers: [],
@@ -7,6 +8,7 @@ const initialState = {
   comments: [],
   neighbours: [],
   isDataLoaded: false,
+  serverStatus: ServerStatus.AVAILABLE,
 };
 
 const applicationData = createReducer(initialState, (builder) => {
@@ -31,6 +33,9 @@ const applicationData = createReducer(initialState, (builder) => {
       state.offer = action.payload.offer;
       state.offers = action.payload.offers;
       state.neighbours = action.payload.neighbours;
+    })
+    .addCase(setServerStatus, (state, action) => {
+      state.serverStatus = action.payload;
     });
 });
 

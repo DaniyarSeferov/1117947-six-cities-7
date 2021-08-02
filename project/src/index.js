@@ -4,15 +4,16 @@ import {configureStore} from '@reduxjs/toolkit';
 import {createAPI} from './services/api';
 import {Provider} from 'react-redux';
 import App from './components/app/app';
-import {AppRoute, AuthorizationStatus} from './const';
+import {AppRoute, AuthorizationStatus, ServerStatus} from './const';
 import rootReducer from './store/root-reducer';
 import {checkAuth} from './store/api-actions';
 import {redirect} from './store/middlewares/redirect';
-import {redirectToRoute, requireAuthorization} from './store/action';
+import {redirectToRoute, requireAuthorization, setServerStatus} from './store/action';
 
 const api = createAPI({
   onUnauthorized: () => store.dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)),
   onNotFound: () => store.dispatch(redirectToRoute(AppRoute.NOT_FOUND)),
+  onServerUnavailable: () => store.dispatch(setServerStatus(ServerStatus.UNAVAILABLE)),
 });
 
 const store = configureStore({

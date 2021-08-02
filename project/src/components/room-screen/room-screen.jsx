@@ -1,13 +1,12 @@
 import React, {useEffect} from 'react';
 import Header from '../header/header';
-import {offerProp, reviewProp} from './room-screen.prop';
 import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getKey, getMapPoints, getRatingPercent, isEmptyObject} from '../../utils';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import {AppRoute, AuthorizationStatus, MAXIMUM_NEIGHBOURS, MAXIMUM_OFFER_IMAGES, OfferListType} from '../../const';
 import OfferList from '../offer-list/offer-list';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {sendFavorite, fetchOfferData} from '../../store/api-actions';
 import {redirectToRoute, startLoading} from '../../store/action';
 import {getStateNeighbours, getStateOffer, getStateReviews} from '../../store/application-data/selectors';
@@ -15,8 +14,25 @@ import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function RoomScreen(props) {
   const { id } = props.match.params;
-  const {offer = {}, getOfferData, reviews, setFavorite, authorizationStatus} = props;
-  let {neighbours = []} = props;
+  const offer = useSelector(getStateOffer);
+  const reviews = useSelector(getStateReviews);
+  let neighbours = useSelector(getStateNeighbours);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
+  const dispatch = useDispatch();
+
+  const getOfferData = () => {
+    dispatch(startLoading());
+    dispatch(fetchOfferData(id));
+  };
+
+  const setFavorite = (status) => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(sendFavorite(id, status));
+    } else {
+      dispatch(redirectToRoute(AppRoute.SIGN_IN));
+    }
+  };
 
   useEffect(() => {
     getOfferData(id);
@@ -66,7 +82,7 @@ function RoomScreen(props) {
                   type="button"
                   onClick={(event) => {
                     event.preventDefault();
-                    setFavorite(id, Number(!isFavorite), authorizationStatus);
+                    setFavorite(Number(!isFavorite));
                   }}
                 >
                   <svg className="property__bookmark-icon" width="31" height="33">
@@ -162,35 +178,7 @@ function RoomScreen(props) {
 }
 
 RoomScreen.propTypes = {
-  offer: offerProp,
-  reviews: PropTypes.arrayOf(reviewProp),
-  neighbours: PropTypes.arrayOf(offerProp),
-  getOfferData: PropTypes.func.isRequired,
-  setFavorite: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  offer: getStateOffer(state),
-  reviews: getStateReviews(state),
-  neighbours: getStateNeighbours(state),
-  authorizationStatus: getAuthorizationStatus(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  getOfferData(id) {
-    dispatch(startLoading());
-    dispatch(fetchOfferData(id));
-  },
-  setFavorite(id, status, authorizationStatus) {
-    if (authorizationStatus === AuthorizationStatus.AUTH) {
-      dispatch(sendFavorite(id, status));
-    } else {
-      dispatch(redirectToRoute(AppRoute.SIGN_IN));
-    }
-  },
-});
-
-export {RoomScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(RoomScreen);
+export default RoomScreen;

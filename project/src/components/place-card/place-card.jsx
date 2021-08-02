@@ -5,13 +5,25 @@ import {getAccommodationTypeTitle, getRatingPercent} from '../../utils';
 import {Link} from 'react-router-dom';
 import {sendFavorite} from '../../store/api-actions';
 import {AppRoute, AuthorizationStatus} from '../../const';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {redirectToRoute} from '../../store/action';
 import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function PlaceCard(props) {
-  const {offer, onHover, className = '', imageClassName = '', setFavorite, authorizationStatus} = props;
-  const {isPremium, previewImage, price, isFavorite, title} = offer;
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
+  const dispatch = useDispatch();
+
+  const setFavorite = (status) => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(sendFavorite(id, status));
+    } else {
+      dispatch(redirectToRoute(AppRoute.SIGN_IN));
+    }
+  };
+
+  const {offer, onHover, className = '', imageClassName = ''} = props;
+  const {isPremium, previewImage, price, isFavorite, title, id} = offer;
   let {rating, type} = offer;
   rating = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
@@ -24,7 +36,7 @@ function PlaceCard(props) {
       </div>}
 
       <div className={`place-card__image-wrapper ${imageClassName}`}>
-        <Link to={`/offer/${offer.id}`}>
+        <Link to={`/offer/${id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
         </Link>
       </div>
@@ -39,7 +51,7 @@ function PlaceCard(props) {
             type="button"
             onClick={(event) => {
               event.preventDefault();
-              setFavorite(offer.id, Number(!isFavorite), authorizationStatus);
+              setFavorite(Number(!isFavorite));
             }}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
@@ -55,7 +67,7 @@ function PlaceCard(props) {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${offer.id}`}>{title}</Link>
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
@@ -68,23 +80,6 @@ PlaceCard.propTypes = {
   onHover: PropTypes.func.isRequired,
   className: PropTypes.string,
   imageClassName: PropTypes.string,
-  setFavorite: PropTypes.func.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  authorizationStatus: getAuthorizationStatus(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setFavorite(id, status, authorizationStatus) {
-    if (authorizationStatus === AuthorizationStatus.AUTH) {
-      dispatch(sendFavorite(id, status));
-    } else {
-      dispatch(redirectToRoute(AppRoute.SIGN_IN));
-    }
-  },
-});
-
-export {PlaceCard};
-export default connect(mapStateToProps, mapDispatchToProps)(PlaceCard);
+export default PlaceCard;

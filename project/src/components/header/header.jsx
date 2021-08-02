@@ -2,12 +2,18 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import {logout} from '../../store/api-actions';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
 import {getAuthorizationStatus, getStateUser} from '../../store/user/selectors';
 
-function Header(props) {
-  const {logoutUser, user, authorizationStatus} = props;
+function Header() {
+  const user = useSelector(getStateUser);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
+  const dispatch = useDispatch();
+
+  const logoutUser = () => {
+    dispatch(logout());
+  };
 
   return (
     <header className="header">
@@ -59,25 +65,4 @@ function Header(props) {
   );
 }
 
-Header.propTypes = {
-  logoutUser: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    avatarUrl: PropTypes.string,
-    email: PropTypes.string,
-  }).isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  user: getStateUser(state),
-  authorizationStatus: getAuthorizationStatus(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  logoutUser() {
-    dispatch(logout());
-  },
-});
-
-export {Header};
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;

@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import {useSelector, useDispatch} from 'react-redux';
 import Header from '../header/header';
-import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
 import OfferList from '../offer-list/offer-list';
 import Map from '../map/map';
 import {Cities, OfferListType} from '../../const';
-import {connect} from 'react-redux';
 import CitiesList from '../cities-list/cities-list';
 import SortingOptions from '../sorting-options/sorting-options';
 import {getMapPoints, sortPriceHigh, sortPriceLow, sortTopRated} from '../../utils';
@@ -15,11 +13,25 @@ import {changeCity, startLoading} from '../../store/action';
 import {getLoadedDataStatus, getStateOffers} from '../../store/application-data/selectors';
 import {getStateCity} from '../../store/application-process/selectors';
 
-function MainScreen(props) {
+function MainScreen() {
   const [sortKey, setSortKey] = useState('POPULAR');
   const [activeOffer, setActiveOffer] = useState(null);
-  const {city, onChangeCity, requestOffers, isDataLoaded} = props;
-  let {offers} = props;
+
+  const city = useSelector(getStateCity);
+  let offers = useSelector(getStateOffers);
+  const isDataLoaded = useSelector(getLoadedDataStatus);
+
+  const dispatch = useDispatch();
+
+  const onChangeCity = (newCity) => {
+    dispatch(changeCity(newCity));
+  };
+
+  const requestOffers = () => {
+    dispatch(startLoading());
+    dispatch(fetchOffers());
+  };
+
   offers = getOffers(offers, city, sortKey);
   const hasOffers = offers.length ? true : null;
   const points = getMapPoints(offers, activeOffer);
@@ -85,30 +97,6 @@ function MainScreen(props) {
   );
 }
 
-MainScreen.propTypes = {
-  offers: PropTypes.arrayOf(offerProp).isRequired,
-  onChangeCity: PropTypes.func.isRequired,
-  city: cityNameProp.isRequired,
-  requestOffers: PropTypes.func.isRequired,
-  isDataLoaded: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  city: getStateCity(state),
-  offers: getStateOffers(state),
-  isDataLoaded: getLoadedDataStatus(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onChangeCity(city) {
-    dispatch(changeCity(city));
-  },
-  requestOffers() {
-    dispatch(startLoading());
-    dispatch(fetchOffers());
-  },
-});
-
 const getOffers = (offers, city, sort) => {
   offers = offers.filter((offer) => offer.city.name === city);
 
@@ -124,5 +112,4 @@ const getOffers = (offers, city, sort) => {
   return offers;
 };
 
-export {MainScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
+export default MainScreen;

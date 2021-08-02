@@ -1,12 +1,19 @@
 import React from 'react';
 import Header from '../header/header';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
 import {login} from '../../store/api-actions';
 import useForm, {getValidators} from '../../hooks/use-form/use-form';
 import {getRequestError} from '../../store/application-process/selectors';
 
-function SignInScreen({onSubmit, sendError}) {
+function SignInScreen() {
+  const sendError = useSelector(getRequestError);
+
+  const dispatch = useDispatch();
+
+  const onSubmit = (authData) => {
+    dispatch(login(authData));
+  };
+
   const formRef = React.useRef(null);
   const validators = getValidators();
   const formFunctions = useForm(formRef, {
@@ -89,20 +96,4 @@ function SignInScreen({onSubmit, sendError}) {
   );
 }
 
-SignInScreen.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  sendError: PropTypes.string,
-};
-
-const mapStateToProps = (state) => ({
-  sendError: getRequestError(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit(authData) {
-    dispatch(login(authData));
-  },
-});
-
-export {SignInScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);
+export default SignInScreen;

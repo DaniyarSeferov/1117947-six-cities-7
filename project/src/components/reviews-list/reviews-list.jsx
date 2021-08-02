@@ -3,13 +3,14 @@ import CommentForm from '../comment-form/comment-form';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Review from '../review/review';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {AuthorizationStatus, MAXIMUM_REVIEWS} from '../../const';
 import {sortReviews} from '../../utils';
 import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function ReviewsList(props) {
-  const {reviews, authorizationStatus, roomId} = props;
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const {reviews, roomId} = props;
   const sortedReviews = reviews.slice().sort(sortReviews).slice(0, MAXIMUM_REVIEWS);
 
   return (
@@ -30,13 +31,7 @@ function ReviewsList(props) {
 
 ReviewsList.propTypes = {
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
   roomId: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  authorizationStatus: getAuthorizationStatus(state),
-});
-
-export {ReviewsList};
-export default connect(mapStateToProps, null)(ReviewsList);
+export default ReviewsList;

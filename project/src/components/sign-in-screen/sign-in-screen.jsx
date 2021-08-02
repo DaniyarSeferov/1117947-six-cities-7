@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {login} from '../../store/api-actions';
 import useForm, {getValidators} from '../../hooks/use-form/use-form';
-import {getRequestError, getRequestStatus} from '../../store/application-process/selectors';
+import {getRequestError} from '../../store/application-process/selectors';
 
-function SignInScreen({onSubmit, isDataSent, sendError}) {
+function SignInScreen({onSubmit, sendError}) {
   const formRef = React.useRef(null);
   const validators = getValidators();
   const formFunctions = useForm(formRef, {
@@ -92,11 +92,9 @@ function SignInScreen({onSubmit, isDataSent, sendError}) {
 SignInScreen.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   sendError: PropTypes.string,
-  isDataSent: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  isDataSent: getRequestStatus(state),
   sendError: getRequestError(state),
 });
 

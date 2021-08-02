@@ -13,53 +13,62 @@ export const ActionType = {
   REDIRECT_TO_ROUTE: 'page/redirectToRoute',
 };
 
-export const ActionCreator = {
-  changeCity: (city) => ({
-    type: ActionType.CITY_CHANGE,
-    city,
-  }),
-  loadOffers: (offers) => ({
-    type: ActionType.LOAD_OFFERS,
-    payload: offers,
-  }),
-  setFavorite: (data) => ({
-    type: ActionType.SET_FAVORITE,
-    payload: data,
-  }),
-  loadOffer: (offerData) => ({
-    type: ActionType.LOAD_OFFER,
-    payload: offerData,
-  }),
-  loadComments: (comments) => ({
-    type: ActionType.LOAD_COMMENTS,
-    payload: comments,
-  }),
-  startLoading: () => ({
-    type: ActionType.START_LOADING,
-  }),
-  startSending: () => ({
-    type: ActionType.START_SENDING,
-  }),
-  finishSending: (error) => ({
-    type: ActionType.FINISH_SENDING,
-    payload: error,
-  }),
-  requireAuthorization: (status) => ({
-    type: ActionType.REQUIRED_AUTHORIZATION,
-    payload: status,
-  }),
-  getUserData: (user) => ({
-    type: ActionType.GET_USER_DATA,
-    payload: user,
-  }),
-  logout: () => ({
-    type: ActionType.LOGOUT,
-  }),
-  redirectToRoute: (url) => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
-    payload: url,
-  }),
-};
+export const changeCity = (city) => ({
+  type: ActionType.CITY_CHANGE,
+  city,
+});
+
+export const loadOffers = (offers) => ({
+  type: ActionType.LOAD_OFFERS,
+  payload: offers,
+});
+
+export const loadOffer = (offerData) => ({
+  type: ActionType.LOAD_OFFER,
+  payload: offerData,
+});
+
+export const setFavorite = (data) => ({
+  type: ActionType.SET_FAVORITE,
+  payload: data,
+});
+
+export const loadComments = (comments) => ({
+  type: ActionType.LOAD_COMMENTS,
+  payload: comments,
+});
+
+export const startLoading = () => ({
+  type: ActionType.START_LOADING,
+});
+
+export const startSending = () => ({
+  type: ActionType.START_SENDING,
+});
+
+export const finishSending = (error) => ({
+  type: ActionType.FINISH_SENDING,
+  payload: error,
+});
+
+export const requireAuthorization = (status) => ({
+  type: ActionType.REQUIRED_AUTHORIZATION,
+  payload: status,
+});
+
+export const getUserData = (user) => ({
+  type: ActionType.GET_USER_DATA,
+  payload: user,
+});
+
+export const logout = () => ({
+  type: ActionType.LOGOUT,
+});
+
+export const redirectToRoute = (url) => ({
+  type: ActionType.REDIRECT_TO_ROUTE,
+  payload: url,
+});
 
 export const adaptToClient = (offer) => {
   const adaptedOffer = Object.assign(

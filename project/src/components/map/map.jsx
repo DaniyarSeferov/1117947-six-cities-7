@@ -23,9 +23,11 @@ function Map(props) {
   });
 
   useEffect(() => {
+    const markers = [];
+
     if (map) {
       points.forEach((point) => {
-        leaflet
+        const marker = leaflet
           .marker({
             lat: point.latitude,
             lng: point.longitude,
@@ -33,8 +35,15 @@ function Map(props) {
             icon: point.isActive ? activeCustomIcon : defaultCustomIcon,
           })
           .addTo(map);
+        markers.push(marker);
       });
     }
+
+    return () => {
+      if (map && markers) {
+        markers.forEach((marker) => map.removeLayer(marker));
+      }
+    };
   }, [map, points]);
 
   return props.render(mapRef);

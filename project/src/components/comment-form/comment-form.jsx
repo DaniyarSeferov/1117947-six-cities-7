@@ -6,14 +6,26 @@ import {
   RatingType
 } from '../../const';
 import useForm, {getValidators} from '../../hooks/use-form/use-form';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {sendComment} from '../../store/api-actions';
 import PropTypes from 'prop-types';
-import {ActionCreator} from '../../store/action';
+import {startSending} from '../../store/action';
+import {getRequestError, getRequestStatus} from '../../store/application-process/selectors';
 
 function CommentForm(props) {
   const [isFormValid, setFormValid] = useState(false);
-  const {onSubmit, roomId, isDataSent, sendError} = props;
+
+  const isDataSent = useSelector(getRequestStatus);
+  const sendError = useSelector(getRequestError);
+
+  const dispatch = useDispatch();
+
+  const onSubmit = (id, comment) => {
+    dispatch(startSending());
+    dispatch(sendComment(id, comment));
+  };
+
+  const {roomId} = props;
   const formRef = React.useRef(null);
   const validators = getValidators();
   const [getValue, clear, isValid] = useForm(formRef, {
@@ -118,23 +130,7 @@ function CommentForm(props) {
 }
 
 CommentForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
-  sendError: PropTypes.string,
-  isDataSent: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  isDataSent: state.isDataSent,
-  sendError: state.sendError,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit(id, comment) {
-    dispatch(ActionCreator.startSending());
-    dispatch(sendComment(id, comment));
-  },
-});
-
-export {CommentForm};
-export default connect(mapStateToProps, mapDispatchToProps)(CommentForm);
+export default CommentForm;

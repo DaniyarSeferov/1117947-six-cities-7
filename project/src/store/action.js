@@ -1,7 +1,9 @@
+import {createAction} from '@reduxjs/toolkit';
+
 export const ActionType = {
   CITY_CHANGE: 'city/change',
   LOAD_OFFERS: 'data/loadOffers',
-  LOAD_SINGLE_OFFER: 'data/loadSingleOffer',
+  SET_FAVORITE: 'data/setFavorite',
   LOAD_OFFER: 'data/loadOffer',
   LOAD_COMMENTS: 'data/loadComments',
   START_LOADING: 'data/startLoading',
@@ -13,53 +15,47 @@ export const ActionType = {
   REDIRECT_TO_ROUTE: 'page/redirectToRoute',
 };
 
-export const ActionCreator = {
-  changeCity: (city) => ({
-    type: ActionType.CITY_CHANGE,
-    city,
-  }),
-  loadOffers: (offers) => ({
-    type: ActionType.LOAD_OFFERS,
-    payload: offers,
-  }),
-  loadSingleOffer: (offer) => ({
-    type: ActionType.LOAD_SINGLE_OFFER,
-    payload: offer,
-  }),
-  loadOffer: (offerData) => ({
-    type: ActionType.LOAD_OFFER,
-    payload: offerData,
-  }),
-  loadComments: (comments) => ({
-    type: ActionType.LOAD_COMMENTS,
-    payload: comments,
-  }),
-  startLoading: () => ({
-    type: ActionType.START_LOADING,
-  }),
-  startSending: () => ({
-    type: ActionType.START_SENDING,
-  }),
-  finishSending: (error) => ({
-    type: ActionType.FINISH_SENDING,
-    payload: error,
-  }),
-  requireAuthorization: (status) => ({
-    type: ActionType.REQUIRED_AUTHORIZATION,
-    payload: status,
-  }),
-  getUserData: (user) => ({
-    type: ActionType.GET_USER_DATA,
-    payload: user,
-  }),
-  logout: () => ({
-    type: ActionType.LOGOUT,
-  }),
-  redirectToRoute: (url) => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
-    payload: url,
-  }),
-};
+export const changeCity = createAction(ActionType.CITY_CHANGE, (city) => ({
+  payload: city,
+}));
+
+export const loadOffers = createAction(ActionType.LOAD_OFFERS, (offers) => ({
+  payload: offers,
+}));
+
+export const loadOffer = createAction(ActionType.LOAD_OFFER, (offerData) => ({
+  payload: offerData,
+}));
+
+export const setFavorite = createAction(ActionType.SET_FAVORITE, (data) => ({
+  payload: data,
+}));
+
+export const loadComments = createAction(ActionType.LOAD_COMMENTS, (comments) => ({
+  payload: comments,
+}));
+
+export const startLoading = createAction(ActionType.START_LOADING);
+
+export const startSending = createAction(ActionType.START_SENDING);
+
+export const finishSending = createAction(ActionType.FINISH_SENDING, (error) => ({
+  payload: error,
+}));
+
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({
+  payload: status,
+}));
+
+export const getUserData = createAction(ActionType.GET_USER_DATA, (user) => ({
+  payload: user,
+}));
+
+export const logoutAction = createAction(ActionType.LOGOUT);
+
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({
+  payload: url,
+}));
 
 export const adaptToClient = (offer) => {
   const adaptedOffer = Object.assign(

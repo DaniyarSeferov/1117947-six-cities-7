@@ -1,24 +1,50 @@
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import Header from '../header/header';
-import {cityNameProp, offerProp} from '../room-screen/room-screen.prop';
 import OfferList from '../offer-list/offer-list';
 import Map from '../map/map';
 import {Cities, OfferListType} from '../../const';
-import {connect} from 'react-redux';
-import {ActionCreator} from '../../store/action';
 import CitiesList from '../cities-list/cities-list';
 import SortingOptions from '../sorting-options/sorting-options';
 import {getMapPoints, sortPriceHigh, sortPriceLow, sortTopRated} from '../../utils';
+import {fetchOffers} from '../../store/api-actions';
+import SpinnerScreen from '../spinner-screen/spinner-screen';
+import {changeCity, startLoading} from '../../store/action';
+import {getLoadedDataStatus, getStateOffers} from '../../store/application-data/selectors';
+import {getStateCity} from '../../store/application-process/selectors';
 
-function MainScreen(props) {
+function MainScreen() {
   const [sortKey, setSortKey] = useState('POPULAR');
   const [activeOffer, setActiveOffer] = useState(null);
-  const {city, onChangeCity} = props;
-  let {offers} = props;
+
+  const city = useSelector(getStateCity);
+  let offers = useSelector(getStateOffers);
+  const isDataLoaded = useSelector(getLoadedDataStatus);
+
+  const dispatch = useDispatch();
+
+  const onChangeCity = (newCity) => {
+    dispatch(changeCity(newCity));
+  };
+
+  const requestOffers = () => {
+    dispatch(startLoading());
+    dispatch(fetchOffers());
+  };
+
   offers = getOffers(offers, city, sortKey);
   const hasOffers = offers.length ? true : null;
   const points = getMapPoints(offers, activeOffer);
+
+  useEffect(() => {
+    requestOffers();
+  }, []);
+
+  if (!isDataLoaded) {
+    return (
+      <SpinnerScreen />
+    );
+  }
 
   return (
     <div className="page page--gray page--main">
@@ -71,23 +97,6 @@ function MainScreen(props) {
   );
 }
 
-MainScreen.propTypes = {
-  offers: PropTypes.arrayOf(offerProp).isRequired,
-  onChangeCity: PropTypes.func.isRequired,
-  city: cityNameProp.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  city: state.city,
-  offers: state.offers,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onChangeCity(city) {
-    dispatch(ActionCreator.changeCity(city));
-  },
-});
-
 const getOffers = (offers, city, sort) => {
   offers = offers.filter((offer) => offer.city.name === city);
 
@@ -103,5 +112,4 @@ const getOffers = (offers, city, sort) => {
   return offers;
 };
 
-export {MainScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
+export default MainScreen;

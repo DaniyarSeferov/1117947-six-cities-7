@@ -1,13 +1,35 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Header from '../header/header';
-import PropTypes from 'prop-types';
-import {offerProp} from '../room-screen/room-screen.prop';
 import FavoritesList from '../favorites-list/favorites-list';
 import {AppRoute} from '../../const';
 import {Link} from 'react-router-dom';
+import {fetchFavorite} from '../../store/api-actions';
+import {useDispatch, useSelector} from 'react-redux';
+import SpinnerScreen from '../spinner-screen/spinner-screen';
+import {startLoading} from '../../store/action';
+import {getLoadedDataStatus, getStateOffers} from '../../store/application-data/selectors';
 
-function FavoritesScreen(props) {
-  const {offers} = props;
+function FavoritesScreen() {
+  let offers = useSelector(getStateOffers);
+  const isDataLoaded = useSelector(getLoadedDataStatus);
+  offers = offers.filter((offer) => offer.isFavorite);
+
+  const dispatch = useDispatch();
+
+  const requestOffers = () => {
+    dispatch(startLoading());
+    dispatch(fetchFavorite());
+  };
+
+  useEffect(() => {
+    requestOffers();
+  }, []);
+
+  if (!isDataLoaded) {
+    return (
+      <SpinnerScreen />
+    );
+  }
 
   return (
     <div className="page">
@@ -34,9 +56,5 @@ function FavoritesScreen(props) {
     </div>
   );
 }
-
-FavoritesScreen.propTypes = {
-  offers: PropTypes.arrayOf(offerProp).isRequired,
-};
 
 export default FavoritesScreen;

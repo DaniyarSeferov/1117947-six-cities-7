@@ -3,10 +3,27 @@ import {offerProp} from '../room-screen/room-screen.prop';
 import PropTypes from 'prop-types';
 import {getAccommodationTypeTitle, getRatingPercent} from '../../utils';
 import {Link} from 'react-router-dom';
+import {sendFavorite} from '../../store/api-actions';
+import {AppRoute, AuthorizationStatus} from '../../const';
+import {useDispatch, useSelector} from 'react-redux';
+import {redirectToRoute} from '../../store/action';
+import {getAuthorizationStatus} from '../../store/user/selectors';
 
 function PlaceCard(props) {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
+  const dispatch = useDispatch();
+
+  const setFavorite = (status) => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(sendFavorite(id, status));
+    } else {
+      dispatch(redirectToRoute(AppRoute.SIGN_IN));
+    }
+  };
+
   const {offer, onHover, className = '', imageClassName = ''} = props;
-  const {isPremium, previewImage, price, isFavorite, title} = offer;
+  const {isPremium, previewImage, price, isFavorite, title, id} = offer;
   let {rating, type} = offer;
   rating = getRatingPercent(rating);
   type = getAccommodationTypeTitle(type);
@@ -19,7 +36,7 @@ function PlaceCard(props) {
       </div>}
 
       <div className={`place-card__image-wrapper ${imageClassName}`}>
-        <Link to={`/offer/${offer.id}`}>
+        <Link to={`/offer/${id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
         </Link>
       </div>
@@ -29,7 +46,14 @@ function PlaceCard(props) {
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={`place-card__bookmark-button button ${isFavorite && 'place-card__bookmark-button--active'}`} type="button">
+          <button
+            className={`place-card__bookmark-button button ${isFavorite && 'place-card__bookmark-button--active'}`}
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              setFavorite(Number(!isFavorite));
+            }}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
@@ -43,7 +67,7 @@ function PlaceCard(props) {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${offer.id}`}>{title}</Link>
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>

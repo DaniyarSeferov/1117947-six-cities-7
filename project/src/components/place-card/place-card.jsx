@@ -29,7 +29,7 @@ function PlaceCard(props) {
   type = getAccommodationTypeTitle(type);
 
   return (
-    <article className={`place-card ${className}`} onMouseOver={() => {onHover(offer);}}>
+    <article className={`place-card ${className}`} onMouseOver={() => {onHover(offer);}} onMouseLeave={() => {onHover(null);}}>
       {isPremium &&
       <div className="place-card__mark">
         <span>Premium</span>

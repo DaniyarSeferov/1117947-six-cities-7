@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Header from '../header/header';
 import {useDispatch, useSelector} from 'react-redux';
 import {login} from '../../store/api-actions';
@@ -6,17 +6,8 @@ import useForm, {getValidators} from '../../hooks/use-form/use-form';
 import {getRequestError} from '../../store/application-process/selectors';
 
 function SignInScreen() {
-  const sendError = useSelector(getRequestError);
-
-  const dispatch = useDispatch();
-
-  const onSubmit = (authData) => {
-    dispatch(login(authData));
-  };
-
-  const formRef = React.useRef(null);
   const validators = getValidators();
-  const formFunctions = useForm(formRef, {
+  const [controls] = useState({
     email: [{
       validator: validators.email,
       error: 'The field does not contain a valid email.',
@@ -26,6 +17,16 @@ function SignInScreen() {
       error: 'Password is required.',
     }],
   });
+  const sendError = useSelector(getRequestError);
+
+  const dispatch = useDispatch();
+
+  const onSubmit = (authData) => {
+    dispatch(login(authData));
+  };
+
+  const formRef = React.useRef(null);
+  const formFunctions = useForm(formRef, controls);
   const getValue = formFunctions[0];
   const isValid = formFunctions[2];
 

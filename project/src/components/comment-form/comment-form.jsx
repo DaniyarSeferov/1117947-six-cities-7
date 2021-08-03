@@ -15,6 +15,18 @@ import {getRequestError, getRequestStatus} from '../../store/application-process
 function CommentForm(props) {
   const [isFormValid, setFormValid] = useState(false);
 
+  const validators = getValidators();
+  const [controls] = useState({
+    rating: [{
+      validator: validators.required,
+      error: 'Rating is required.',
+    }],
+    review: [{
+      validator: validators.length(COMMENT_MINIMUM_LENGTH, COMMENT_MAXIMUM_LENGTH),
+      error: `Review should be between ${COMMENT_MINIMUM_LENGTH} and ${COMMENT_MAXIMUM_LENGTH} characters long.`,
+    }],
+  });
+
   const isDataSent = useSelector(getRequestStatus);
   const sendError = useSelector(getRequestError);
 
@@ -27,24 +39,15 @@ function CommentForm(props) {
 
   const {roomId} = props;
   const formRef = React.useRef(null);
-  const validators = getValidators();
-  const [getValue, clear, isValid] = useForm(formRef, {
-    rating: [{
-      validator: validators.required,
-      error: 'Rating is required.',
-    }],
-    review: [{
-      validator: validators.length(COMMENT_MINIMUM_LENGTH, COMMENT_MAXIMUM_LENGTH),
-      error: `Review should be between ${COMMENT_MINIMUM_LENGTH} and ${COMMENT_MAXIMUM_LENGTH} characters long.`,
-    }],
-  });
+
+  const [getValue, clear, isValid] = useForm(formRef, controls);
 
   useEffect(() => {
-    if (!sendError && isDataSent) {
+    if (!sendError && isDataSent && clear) {
       clear();
       setFormValid(false);
     }
-  }, [sendError, isDataSent]);
+  }, [sendError, isDataSent, clear]);
 
   const handleChange = (evt) => {
     setFormValid(isValid(false));

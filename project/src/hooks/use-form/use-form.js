@@ -1,54 +1,61 @@
+import {useEffect, useState} from 'react';
+
 function useForm(formRef, controls) {
+  const [formFunctions, setFormFunctions] = useState([]);
 
-  const getValue = () => {
-    const value = {};
-    Object.keys(controls).forEach((control) => {
-      value[control] = formRef.current[control].value;
-    });
-    return value;
-  };
+  useEffect(() => {
+    const getValue = () => {
+      const value = {};
+      Object.keys(controls).forEach((control) => {
+        value[control] = formRef.current[control].value;
+      });
+      return value;
+    };
 
-  const clear = () => {
-    Object.keys(controls).forEach((control) => {
-      const isRadio = Object.prototype.isPrototypeOf.call(RadioNodeList.prototype, formRef.current[control]);
-      if (isRadio) {
-        Array.from(formRef.current[control]).forEach((radio) => {
-          radio.checked = false;
-        });
-      } else {
-        formRef.current[control].value = '';
-      }
-    });
-  };
-
-  const isValid = (showErrorMessage = true) => {
-    let isFormValid = true;
-
-    Object.keys(controls).forEach((control) => {
-      const validators = controls[control];
-      let isValidControl = true;
-      const errors = [];
-
-      validators.forEach(({validator, error}) => {
-        const isValidValidator = validator(formRef.current[control].value);
-        isValidControl = isValidValidator && isValidControl;
-
-        if (!isValidValidator) {
-          errors.push(error);
+    const clear = () => {
+      Object.keys(controls).forEach((control) => {
+        const isRadio = Object.prototype.isPrototypeOf.call(RadioNodeList.prototype, formRef.current[control]);
+        if (isRadio) {
+          Array.from(formRef.current[control]).forEach((radio) => {
+            radio.checked = false;
+          });
+        } else {
+          formRef.current[control].value = '';
         }
       });
+    };
 
-      if (showErrorMessage) {
-        isValidControl ? clearError(formRef.current[control]) : setError(formRef.current[control], errors);
-      }
+    const isValid = (showErrorMessage = true) => {
+      let isFormValid = true;
 
-      isFormValid = isFormValid && isValidControl;
-    });
+      Object.keys(controls).forEach((control) => {
+        const validators = controls[control];
+        let isValidControl = true;
+        const errors = [];
 
-    return isFormValid;
-  };
+        validators.forEach(({validator, error}) => {
+          const isValidValidator = validator(formRef.current[control].value);
+          isValidControl = isValidValidator && isValidControl;
 
-  return [getValue, clear, isValid];
+          if (!isValidValidator) {
+            errors.push(error);
+          }
+        });
+
+        if (showErrorMessage) {
+          isValidControl ? clearError(formRef.current[control]) : setError(formRef.current[control], errors);
+        }
+
+        isFormValid = isFormValid && isValidControl;
+      });
+
+      return isFormValid;
+    };
+
+    setFormFunctions([getValue, clear, isValid]);
+  }, [formRef, controls]);
+
+  return formFunctions;
 }
 
 function setError(control, errors) {

@@ -9,6 +9,7 @@ export const ActionType = {
   START_LOADING: 'data/startLoading',
   START_SENDING: 'data/startSending',
   FINISH_SENDING: 'data/finishSending',
+  DELETE_SENDING_ERROR: 'data/deleteSendingError',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   GET_USER_DATA: 'user/data',
   LOGOUT: 'user/logout',
@@ -43,6 +44,8 @@ export const startSending = createAction(ActionType.START_SENDING);
 export const finishSending = createAction(ActionType.FINISH_SENDING, (error) => ({
   payload: error,
 }));
+
+export const deleteSendingError = createAction(ActionType.DELETE_SENDING_ERROR);
 
 export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({
   payload: status,

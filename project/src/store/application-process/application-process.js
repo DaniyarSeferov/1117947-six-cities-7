@@ -1,5 +1,5 @@
 import {
-  changeCity,
+  changeCity, deleteSendingError,
   finishSending,
   startSending
 } from '../action';
@@ -24,6 +24,9 @@ const applicationProcess = createReducer(initialState, (builder) => {
     .addCase(finishSending, (state, action) => {
       state.isDataSent = true;
       state.sendError = action.payload;
+    })
+    .addCase(deleteSendingError, (state, action) => {
+      state.sendError = '';
     });
 });
 

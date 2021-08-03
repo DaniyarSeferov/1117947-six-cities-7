@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../header/header';
 import {useDispatch, useSelector} from 'react-redux';
 import {login} from '../../store/api-actions';
 import useForm, {getValidators} from '../../hooks/use-form/use-form';
 import {getRequestError} from '../../store/application-process/selectors';
+import {deleteSendingError} from '../../store/action';
 
 function SignInScreen() {
   const validators = getValidators();
@@ -42,6 +43,10 @@ function SignInScreen() {
       });
     }
   };
+
+  useEffect(() => {
+    dispatch(deleteSendingError());
+  }, [dispatch]);
 
   return (
     <div className="page page--gray page--login">

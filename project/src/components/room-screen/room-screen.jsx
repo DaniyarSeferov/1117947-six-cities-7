@@ -21,11 +21,6 @@ function RoomScreen(props) {
 
   const dispatch = useDispatch();
 
-  const getOfferData = () => {
-    dispatch(startLoading());
-    dispatch(fetchOfferData(id));
-  };
-
   const setFavorite = (status) => {
     if (authorizationStatus === AuthorizationStatus.AUTH) {
       dispatch(sendFavorite(id, status));
@@ -35,8 +30,9 @@ function RoomScreen(props) {
   };
 
   useEffect(() => {
-    getOfferData(id);
-  }, [id]);
+    dispatch(startLoading());
+    dispatch(fetchOfferData(id));
+  }, [id, dispatch]);
 
   const {images = [], isPremium, title, isFavorite, bedrooms, maxAdults, price, goods = [], rating, host, description, city} = offer;
   let {type} = offer;
@@ -60,7 +56,7 @@ function RoomScreen(props) {
                 const keyValue = `${index}-${image}`;
                 return (
                   <div key={keyValue} className="property__image-wrapper">
-                    <img className="property__image" src={image} alt="Photo studio"/>
+                    <img className="property__image" src={image} alt="studio"/>
                   </div>
                 );
               })}

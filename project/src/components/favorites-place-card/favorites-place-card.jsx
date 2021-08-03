@@ -35,7 +35,7 @@ function FavoritesPlaceCard(props) {
       </div>}
       <div className="favorites__image-wrapper place-card__image-wrapper">
         <Link to={`/offer/${id}`}>
-          <img className="place-card__image" src={previewImage} width="150" height="110" alt="Place image"/>
+          <img className="place-card__image" src={previewImage} width="150" height="110" alt="Place"/>
         </Link>
       </div>
       <div className="favorites__card-info place-card__info">

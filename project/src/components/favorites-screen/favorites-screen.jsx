@@ -16,14 +16,10 @@ function FavoritesScreen() {
 
   const dispatch = useDispatch();
 
-  const requestOffers = () => {
+  useEffect(() => {
     dispatch(startLoading());
     dispatch(fetchFavorite());
-  };
-
-  useEffect(() => {
-    requestOffers();
-  }, []);
+  }, [dispatch]);
 
   if (!isDataLoaded) {
     return (

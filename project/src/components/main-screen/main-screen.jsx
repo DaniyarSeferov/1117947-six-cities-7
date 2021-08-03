@@ -27,18 +27,14 @@ function MainScreen() {
     dispatch(changeCity(newCity));
   };
 
-  const requestOffers = () => {
-    dispatch(startLoading());
-    dispatch(fetchOffers());
-  };
-
   offers = getOffers(offers, city, sortKey);
   const hasOffers = offers.length ? true : null;
   const points = getMapPoints(offers, activeOffer);
 
   useEffect(() => {
-    requestOffers();
-  }, []);
+    dispatch(startLoading());
+    dispatch(fetchOffers());
+  }, [dispatch]);
 
   if (!isDataLoaded) {
     return (
@@ -107,9 +103,9 @@ const getOffers = (offers, city, sort) => {
       return offers.slice().sort(sortPriceHigh);
     case 'TOP_RATED':
       return offers.slice().sort(sortTopRated);
+    default:
+      return offers;
   }
-
-  return offers;
 };
 
 export default MainScreen;

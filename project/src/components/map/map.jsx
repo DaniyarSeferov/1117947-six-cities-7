@@ -44,7 +44,7 @@ function Map(props) {
         markers.forEach((marker) => map.removeLayer(marker));
       }
     };
-  }, [map, points]);
+  }, [map, points, activeCustomIcon, defaultCustomIcon]);
 
   return props.render(mapRef);
 }

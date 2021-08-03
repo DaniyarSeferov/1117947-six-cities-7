@@ -30,7 +30,7 @@ function Header() {
                 {authorizationStatus === AuthorizationStatus.AUTH ? (
                   <Link className="header__nav-link header__nav-link--profile" to={AppRoute.FAVORITES}>
                     <div className="header__avatar-wrapper user__avatar-wrapper">
-                      <img src={user.avatarUrl} />
+                      <img src={user.avatarUrl} alt="avatar" />
                     </div>
                     <span className="header__user-name user__name">{user.email}</span>
                   </Link>

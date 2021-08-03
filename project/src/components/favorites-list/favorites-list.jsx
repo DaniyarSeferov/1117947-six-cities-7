@@ -22,9 +22,9 @@ function FavoritesList(props) {
           <li key={city.toLowerCase()} className="favorites__locations-items">
             <div className="favorites__locations locations locations--current">
               <div className="locations__item">
-                <a className="locations__item-link" href="#">
+                <button className="locations__item-link" style={{border: 'none'}}>
                   <span>{city}</span>
-                </a>
+                </button>
               </div>
             </div>
             <div className="favorites__places">

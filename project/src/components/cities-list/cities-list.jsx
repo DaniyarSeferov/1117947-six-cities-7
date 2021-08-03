@@ -10,16 +10,16 @@ function CitiesList(props) {
       <ul className="locations__list tabs__list">
         {cities.map((cityItem) => (
           <li key={`locations-${cityItem}`} className="locations__item">
-            <a
+            <button
               className={`locations__item-link tabs__item ${cityItem === city ? 'tabs__item--active' : ''}`}
-              href={`${cityItem !== city ? '#' : ''}`}
+              style={{border: 'none', cursor: 'pointer', background: cityItem !== city ? 'none' : ''}}
               onClick={(event) => {
                 event.preventDefault();
                 onChangeCity(cityItem);
               }}
             >
               <span>{cityItem}</span>
-            </a>
+            </button>
           </li>
         ))}
       </ul>

@@ -86,9 +86,9 @@ function SignInScreen() {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
+              <button className="locations__item-link" style={{border: 'none'}}>
                 <span>Amsterdam</span>
-              </a>
+              </button>
             </div>
           </section>
         </div>

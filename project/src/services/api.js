@@ -3,7 +3,8 @@ import axios from 'axios';
 const BACKEND_URL = 'https://7.react.pages.academy/six-cities';
 const REQUEST_TIMEOUT = 5000;
 
-const HttpCode = {
+export const HttpCode = {
+  BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
   SERVER_UNAVAILABLE: 503,

@@ -7,6 +7,7 @@ import {
   loadOffers, redirectToRoute, requireAuthorization, setFavorite, logoutAction
 } from './action';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
+import {HttpCode} from '../services/api';
 
 export const fetchOffers = () => (dispatch, _getState, api) => (
   api.get(APIRoute.OFFERS)
@@ -72,7 +73,17 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
     })
     .then((data) => dispatch(getUserData(data)))
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
+    .then(() => dispatch(finishSending('')))
     .then(() => dispatch(redirectToRoute(AppRoute.ROOT)))
+    .catch((error) => {
+      const {response = {}} = error;
+
+      if (response.status === HttpCode.BAD_REQUEST) {
+        dispatch(finishSending('The form does not contain a valid email.'));
+      } else {
+        dispatch(finishSending('There was an error of some sort.'));
+      }
+    })
 );
 
 export const logout = () => (dispatch, _getState, api) => (
